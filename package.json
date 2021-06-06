@@ -1,32 +1,44 @@
 {
   "name": "ezzy-web-crypto",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.0.0",
+  "description": "A wrapper library for envelope encrytion using the WebCrypto API",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc",
     "format": "prettier --write 'src/**/*.ts'",
     "format:check": "prettier 'src/**/*.ts'",
     "lint": "eslint 'src/**/*.ts'",
-    "lint:fix": "eslint --fix 'src/**/*.ts'"
+    "lint:fix": "eslint --fix 'src/**/*.ts'",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/neox5/ezzy-web-crypto.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "webcrypto",
+    "webcrypto api",
+    "envelope",
+    "envelope encryption",
+    "cryptography",
+    "rsa",
+    "aes"
+  ],
+  "author": "Christian Faustmann / neox5, <faustmannchr@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/neox5/ezzy-web-crypto/issues"
   },
   "homepage": "https://github.com/neox5/ezzy-web-crypto#readme",
   "devDependencies": {
+    "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.28.0",
+    "jest": "^27.0.4",
     "prettier": "^2.3.1",
+    "ts-jest": "^27.0.2",
     "typescript": "^4.3.2"
   }
 }
