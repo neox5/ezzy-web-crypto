@@ -1,0 +1,24 @@
+{
+  "name": "ezzy-web-crypto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neox5/ezzy-web-crypto.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neox5/ezzy-web-crypto/issues"
+  },
+  "homepage": "https://github.com/neox5/ezzy-web-crypto#readme",
+  "devDependencies": {
+    "typescript": "^4.3.2"
+  }
+}
