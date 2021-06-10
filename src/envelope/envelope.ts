@@ -10,7 +10,7 @@ import {
 
 const crypto = window.crypto.subtle;
 
-const DEFAULT_WRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
+export const DEFAULT_WRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
 
 /**
  * 
@@ -32,8 +32,8 @@ export function wrapEnvelope(
     | AesGcmParams
     | AesCfbParams = DEFAULT_WRAP_PARAMS,
 ): Observable<string> {
-  let pub$ = pubKeyToCryptoKey(pubKey);
-  let aes$ = aesKeyToCryptoKey(aesKey);
+  const pub$ = pubKeyToCryptoKey(pubKey);
+  const aes$ = aesKeyToCryptoKey(aesKey);
 
   return combineLatest([pub$, aes$]).pipe(
     switchMap(([pub, aes]) =>
@@ -43,8 +43,8 @@ export function wrapEnvelope(
   );
 }
 
-const DEFAULT_UNWRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
-const DEFAULT_UNWRAP_KEY_PARAMS = DEFAULT_AES_KEY_CONFIG;
+export const DEFAULT_UNWRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
+export const DEFAULT_UNWRAP_KEY_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
  * 
