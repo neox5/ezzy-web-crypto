@@ -13,7 +13,7 @@ const crypto = window.crypto.subtle;
 export const DEFAULT_WRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
 
 /**
- * 
+ *
  * @param pubKey instance of CryptoKey or in base64 formate.
  * @param aesKey instance of CryptoKey or in base64 formate.
  * @param wrapParams (optional) if not specified DEFAULT_RSA_KEY_CONFIG is used
@@ -47,12 +47,12 @@ export const DEFAULT_UNWRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
 export const DEFAULT_UNWRAP_KEY_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
- * 
+ *
  * @param envelope wrapped aes key in base64 format
  * @param secKey unwrapping key; instance of CryptoKey or in base64 format
  * @param unwrapParams (optional) defaults to DEFAULT_RSA_KEY_CONFIG
  * @param unwrappedKeyParams (optional) defaults to DEFAULT_AES_KEY_CONFIG
- * @returns 
+ * @returns
  */
 export function unwrapEnvelope(
   envelope: string,

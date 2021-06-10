@@ -63,7 +63,7 @@ export function aesKeyToCryptoKey(
 export const DEFAULT_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
- * 
+ *
  * @param aesKey instance of CryptoKey or in base64 format.
  * @param data data to encrypt; Arraybuffer or string.
  * @param encryptParams (optional) defaults to DEFAULT_AES_KEY_CONFIG.
@@ -104,15 +104,15 @@ export function encryptWithAes(
 export const DEFAULT_DECRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
- * 
+ *
  * @param aesKey instance of CryptoKey or in base64 format.
  * @param encData data to decrypt; ArrayBuffer of base64 string
  * @param iv initialization vector which was used for encryption
  * @param decryptParams (optional) defaults to DEFAULT_AES_KEY_CONFIG
  * @returns Observable of decrypted data as string.
- *  
- *   NOTE: The focus of this libary is currently onyl on string en-/decryption. 
- *   If you want to use this libary for file encryption as well, please raise an 
+ *
+ *   NOTE: The focus of this libary is currently onyl on string en-/decryption.
+ *   If you want to use this libary for file encryption as well, please raise an
  *   issue and I will implement the necessary API for that.
  */
 export function decryptWithAes(
@@ -138,6 +138,6 @@ export function decryptWithAes(
     switchMap((aes: CryptoKey) =>
       from(crypto.decrypt(decryptParams, aes, encData as ArrayBuffer)),
     ),
-    map((buf: ArrayBuffer) => arrayBufferToString(buf))
+    map((buf: ArrayBuffer) => arrayBufferToString(buf)),
   );
 }
