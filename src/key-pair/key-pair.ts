@@ -1,5 +1,5 @@
 import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
-import { from, Observable, zip } from "rxjs";
+import { from, Observable, of, zip } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 export const DEFAULT_RSA_KEY_CONFIG = {
@@ -60,8 +60,14 @@ export function exportPublicKeyAsSpki(key: CryptoKey): Observable<ArrayBuffer> {
   return from(crypto.exportKey("spki", key));
 }
 
-export function pubKeyBase64ToCryptoKey(
-  pubBase64: string,
+/**
+ * 
+ * @param pubKey instance of CryptoKey or in base64 format
+ * @param importParams (optional) defaults to RSA-OAEP with SHA-256
+ * @returns Observable of public key as CryptoKey
+ */
+export function pubKeyToCryptoKey(
+  pubKey: CryptoKey | string,
   importParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
@@ -70,19 +76,25 @@ export function pubKeyBase64ToCryptoKey(
     | DhImportKeyParams
     | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
 ): Observable<CryptoKey> {
+  if (pubKey instanceof CryptoKey) {
+    return of(pubKey);
+  }
+
   return from(
-    crypto.importKey(
-      "spki",
-      base64ToArrayBuffer(pubBase64),
-      importParams,
-      true,
-      ["wrapKey"],
-    ),
+    crypto.importKey("spki", base64ToArrayBuffer(pubKey), importParams, true, [
+      "wrapKey",
+    ]),
   );
 }
 
-export function secKeyBase64ToCryptoKey(
-  secBase64: string,
+/**
+ * 
+ * @param secKey instance of CryptoKey or in base64 format
+ * @param importParams (optional) defaults to RSA-OAEP with SHA-256
+ * @returns Observable of secret/private key as CryptoKey
+ */
+export function secKeyToCryptoKey(
+  secKey: CryptoKey | string,
   importParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
@@ -91,10 +103,14 @@ export function secKeyBase64ToCryptoKey(
     | DhImportKeyParams
     | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
 ): Observable<CryptoKey> {
+  if (secKey instanceof CryptoKey) {
+    return of(secKey)
+  }
+
   return from(
     crypto.importKey(
       "pkcs8",
-      base64ToArrayBuffer(secBase64),
+      base64ToArrayBuffer(secKey),
       importParams,
       true,
       ["unwrapKey"],

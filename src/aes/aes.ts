@@ -1,5 +1,5 @@
 import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
-import { from, Observable } from "rxjs";
+import { from, Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 const crypto = window.crypto.subtle;
@@ -11,14 +11,20 @@ export const DEFAULT_AES_KEY_CONFIG = {
 };
 
 export function generateAesKey(
-  params: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
+  params:
+    | AesKeyGenParams
+    | HmacKeyGenParams
+    | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKey> {
   return from(crypto.generateKey(params, extractable, ["encrypt", "decrypt"]));
 }
 
 export function generateAesKeyBase64(
-  params: AesKeyGenParams | HmacKeyGenParams | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
+  params:
+    | AesKeyGenParams
+    | HmacKeyGenParams
+    | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<string> {
   return generateAesKey(params, extractable).pipe(
@@ -27,9 +33,27 @@ export function generateAesKeyBase64(
   );
 }
 
-export function aesKeyBase64ToCryptoKey(
-  aesBase64: string,
+/**
+ * 
+ * @param aesKey instance of CryptoKey or in base64 format
+ * @param importParams (optional) defaults to AES-GCM
+ * @returns Observable of aes key as CryptoKey
+ */
+export function aesKeyToCryptoKey(
+  aesKey: CryptoKey | string,
   importParams: AlgorithmIdentifier = { name: "AES-GCM" },
 ): Observable<CryptoKey> {
-  return from(crypto.importKey("raw", base64ToArrayBuffer(aesBase64), importParams, false, ["encrypt", "decrypt"]));
+  if (aesKey instanceof CryptoKey) {
+    return of(aesKey)
+  }
+
+  return from(
+    crypto.importKey(
+      "raw",
+      base64ToArrayBuffer(aesKey),
+      importParams,
+      false,
+      ["encrypt", "decrypt"],
+    ),
+  );
 }

@@ -1,34 +1,91 @@
-import { arrayBufferToBase64 } from "arraybuffer-fns";
-import { from, Observable } from "rxjs";
+import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
+import { combineLatest, from, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
-import { aesKeyBase64ToCryptoKey } from "../aes/aes";
-import { pubKeyBase64ToCryptoKey } from "../key-pair/key-pair";
+import { aesKeyToCryptoKey, DEFAULT_AES_KEY_CONFIG } from "../aes";
+import {
+  DEFAULT_RSA_KEY_CONFIG,
+  pubKeyToCryptoKey,
+  secKeyToCryptoKey,
+} from "../key-pair";
 
 const crypto = window.crypto.subtle;
 
-export class EnvelopeWrapper {
-  private _pub: CryptoKey;
+const DEFAULT_WRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
 
-  constructor(pub: CryptoKey | string) {
-    if (pub instanceof CryptoKey) {
-      this._pub = pub;
-      return;
-    }
-    pubKeyBase64ToCryptoKey(pub).subscribe((k) => {
-      this._pub = k;
-    });
-  }
+/**
+ * 
+ * @param pubKey instance of CryptoKey or in base64 formate.
+ * @param aesKey instance of CryptoKey or in base64 formate.
+ * @param wrapParams (optional) if not specified DEFAULT_RSA_KEY_CONFIG is used
+ *   as default.
+ * @returns Observable of wrapped key in base64 format.
+ */
+export function wrapEnvelope(
+  pubKey: CryptoKey | string,
+  aesKey: CryptoKey | string,
+  wrapParams:
+    | AlgorithmIdentifier
+    | RsaOaepParams
+    | AesCtrParams
+    | AesCbcParams
+    | AesCmacParams
+    | AesGcmParams
+    | AesCfbParams = DEFAULT_WRAP_PARAMS,
+): Observable<string> {
+  let pub$ = pubKeyToCryptoKey(pubKey);
+  let aes$ = aesKeyToCryptoKey(aesKey);
 
-  wrap(aesBase64: string): Observable<string> {
-    const wrapParams = { name: "RSA-OAEP", hash: { name: "SHA-256" } };
+  return combineLatest([pub$, aes$]).pipe(
+    switchMap(([pub, aes]) =>
+      from(crypto.wrapKey("raw", aes, pub, wrapParams)),
+    ),
+    map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
+  );
+}
 
-    const aes$ = aesKeyBase64ToCryptoKey(aesBase64);
+const DEFAULT_UNWRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
+const DEFAULT_UNWRAP_KEY_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
-    return aes$.pipe(
-      switchMap((k: CryptoKey) =>
-        from(crypto.wrapKey("raw", k, this._pub, wrapParams)),
+/**
+ * 
+ * @param envelope wrapped aes key in base64 format
+ * @param secKey unwrapping key; instance of CryptoKey or in base64 format
+ * @param unwrapParams (optional) defaults to DEFAULT_RSA_KEY_CONFIG
+ * @param unwrappedKeyParams (optional) defaults to DEFAULT_AES_KEY_CONFIG
+ * @returns 
+ */
+export function unwrapEnvelope(
+  envelope: string,
+  secKey: CryptoKey | string,
+  unwrapParams:
+    | AlgorithmIdentifier
+    | RsaOaepParams
+    | AesCtrParams
+    | AesCbcParams
+    | AesCmacParams
+    | AesGcmParams
+    | AesCfbParams = DEFAULT_UNWRAP_PARAMS,
+  unwrappedKeyParams:
+    | AlgorithmIdentifier
+    | RsaHashedImportParams
+    | EcKeyImportParams
+    | HmacImportParams
+    | DhImportKeyParams
+    | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS,
+): Observable<CryptoKey> {
+  return secKeyToCryptoKey(secKey).pipe(
+    switchMap((sec: CryptoKey) =>
+      from(
+        crypto.unwrapKey(
+          "raw",
+          base64ToArrayBuffer(envelope),
+          sec,
+          unwrapParams,
+          unwrappedKeyParams,
+          true,
+          ["decrypt", "encrypt"],
+        ),
       ),
-      map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
-    );
-  }
+    ),
+  );
 }
