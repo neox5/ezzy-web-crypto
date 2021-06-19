@@ -38,7 +38,9 @@ export function wrapEnvelope(
 
   return combineLatest([pub$, aes$]).pipe(
     switchMap(([pub, aes]) =>
-      fromPromise(crypto.wrapKey("raw", aes as CryptoKey, pub as CryptoKey, wrapParams)),
+      fromPromise(
+        crypto.wrapKey("raw", aes as CryptoKey, pub as CryptoKey, wrapParams),
+      ),
     ),
     map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
   );
@@ -88,6 +90,6 @@ export function unwrapEnvelope(
         ),
       ),
     ),
-    map(value => value as CryptoKey) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((value) => value as CryptoKey), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }

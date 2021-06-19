@@ -24,7 +24,9 @@ export function generateAesKey(
     | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKey> {
-  return fromPromise(crypto.generateKey(params, extractable, ["encrypt", "decrypt"]));
+  return fromPromise(
+    crypto.generateKey(params, extractable, ["encrypt", "decrypt"]),
+  );
 }
 
 export function generateAesKeyBase64(
