@@ -1,6 +1,7 @@
 import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
-import { from, Observable, of, zip } from "rxjs";
+import { Observable, of, zip } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
+import { fromPromise } from "../util/from-promise";
 
 export const DEFAULT_RSA_KEY_CONFIG = {
   name: "RSA-OAEP",
@@ -23,7 +24,7 @@ export function generateKeyPair(
     | DhKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKeyPair> {
-  return from(
+  return fromPromise(
     crypto.generateKey(params, extractable, ["wrapKey", "unwrapKey"]),
   );
 }
@@ -53,11 +54,11 @@ export function generateKeyPairBase64(
 export function exportPrivateKeyAsPkcs8(
   key: CryptoKey,
 ): Observable<ArrayBuffer> {
-  return from(crypto.exportKey("pkcs8", key));
+  return fromPromise(crypto.exportKey("pkcs8", key));
 }
 
 export function exportPublicKeyAsSpki(key: CryptoKey): Observable<ArrayBuffer> {
-  return from(crypto.exportKey("spki", key));
+  return fromPromise(crypto.exportKey("spki", key));
 }
 
 /**
@@ -80,7 +81,7 @@ export function pubKeyToCryptoKey(
     return of(pubKey);
   }
 
-  return from(
+  return fromPromise(
     crypto.importKey("spki", base64ToArrayBuffer(pubKey), importParams, true, [
       "wrapKey",
     ]),
@@ -107,7 +108,7 @@ export function secKeyToCryptoKey(
     return of(secKey);
   }
 
-  return from(
+  return fromPromise(
     crypto.importKey("pkcs8", base64ToArrayBuffer(secKey), importParams, true, [
       "unwrapKey",
     ]),

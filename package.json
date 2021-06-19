@@ -51,6 +51,6 @@
   ],
   "dependencies": {
     "arraybuffer-fns": "^1.0.0",
-    "rxjs": "^7.1.0"
+    "rxjs": "^6.6.7"
   }
 }

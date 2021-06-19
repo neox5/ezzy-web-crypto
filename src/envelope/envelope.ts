@@ -1,5 +1,5 @@
 import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
-import { combineLatest, from, Observable } from "rxjs";
+import { combineLatest, Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { aesKeyToCryptoKey, DEFAULT_AES_KEY_CONFIG } from "../aes";
 import {
@@ -7,6 +7,7 @@ import {
   pubKeyToCryptoKey,
   secKeyToCryptoKey,
 } from "../key-pair";
+import { fromPromise } from "../util/from-promise";
 
 const crypto = window.crypto.subtle;
 
@@ -37,7 +38,7 @@ export function wrapEnvelope(
 
   return combineLatest([pub$, aes$]).pipe(
     switchMap(([pub, aes]) =>
-      from(crypto.wrapKey("raw", aes, pub, wrapParams)),
+      fromPromise(crypto.wrapKey("raw", aes as CryptoKey, pub as CryptoKey, wrapParams)),
     ),
     map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
   );
@@ -75,7 +76,7 @@ export function unwrapEnvelope(
 ): Observable<CryptoKey> {
   return secKeyToCryptoKey(secKey).pipe(
     switchMap((sec: CryptoKey) =>
-      from(
+      fromPromise(
         crypto.unwrapKey(
           "raw",
           base64ToArrayBuffer(envelope),
@@ -87,5 +88,6 @@ export function unwrapEnvelope(
         ),
       ),
     ),
+    map(value => value as CryptoKey) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }

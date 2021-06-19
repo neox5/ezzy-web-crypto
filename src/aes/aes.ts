@@ -4,8 +4,10 @@ import {
   base64ToArrayBuffer,
   stringToArrayBuffer,
 } from "arraybuffer-fns";
-import { from, Observable, of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
+
+import { fromPromise } from "../util/from-promise";
 
 const crypto = window.crypto.subtle;
 
@@ -22,7 +24,7 @@ export function generateAesKey(
     | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKey> {
-  return from(crypto.generateKey(params, extractable, ["encrypt", "decrypt"]));
+  return fromPromise(crypto.generateKey(params, extractable, ["encrypt", "decrypt"]));
 }
 
 export function generateAesKeyBase64(
@@ -33,7 +35,7 @@ export function generateAesKeyBase64(
   extractable: boolean = true,
 ): Observable<string> {
   return generateAesKey(params, extractable).pipe(
-    switchMap((k: CryptoKey) => crypto.exportKey("raw", k)),
+    switchMap((k: CryptoKey) => fromPromise(crypto.exportKey("raw", k))),
     map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
   );
 }
@@ -52,7 +54,7 @@ export function aesKeyToCryptoKey(
     return of(aesKey);
   }
 
-  return from(
+  return fromPromise(
     crypto.importKey("raw", base64ToArrayBuffer(aesKey), importParams, false, [
       "encrypt",
       "decrypt",
@@ -91,7 +93,7 @@ export function encryptWithAes(
 
   return aesKeyToCryptoKey(aesKey).pipe(
     switchMap((aes: CryptoKey) =>
-      from(crypto.encrypt(encryptParams, aes, data as ArrayBuffer)),
+      fromPromise(crypto.encrypt(encryptParams, aes, data as ArrayBuffer)),
     ),
     map((buf: ArrayBuffer) => arrayBufferToBase64(buf)),
     map((base64: string) => ({
@@ -136,7 +138,7 @@ export function decryptWithAes(
 
   return aesKeyToCryptoKey(aesKey).pipe(
     switchMap((aes: CryptoKey) =>
-      from(crypto.decrypt(decryptParams, aes, encData as ArrayBuffer)),
+      fromPromise(crypto.decrypt(decryptParams, aes, encData as ArrayBuffer)),
     ),
     map((buf: ArrayBuffer) => arrayBufferToString(buf)),
   );
