@@ -10,7 +10,7 @@
     "format:check": "prettier 'src/**/*.ts'",
     "lint": "eslint 'src/**/*.ts'",
     "lint:fix": "eslint --fix 'src/**/*.ts'",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "prepare": "npm run build",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
