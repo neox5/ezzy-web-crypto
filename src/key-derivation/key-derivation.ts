@@ -1,3 +1,5 @@
+// REFERENCE: https://bradyjoslin.com/blog/encryption-webcrypto/
+
 import {
   arrayBufferToBase64,
   base64ToArrayBuffer,
