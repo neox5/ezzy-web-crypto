@@ -124,8 +124,8 @@ export function decryptStringWithAes(
     | AesGcmParams
     | AesCfbParams = DEFAULT_DECRYPT_PARAMS,
 ): Observable<string> {
-  const buf = base64ToArrayBuffer(encData)
-  const {buf1, buf2} = splitArrayBufferAt(buf, 16) // first 16 bytes are the iv
+  const buf = base64ToArrayBuffer(encData);
+  const { buf1, buf2 } = splitArrayBufferAt(buf, 16); // first 16 bytes are the iv
   decryptParams = { ...decryptParams, iv: buf1 };
 
   return aesKeyToCryptoKey(aesKey).pipe(
