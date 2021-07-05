@@ -1,7 +1,9 @@
 import {
+  appendArrayBuffer,
   arrayBufferToBase64,
   arrayBufferToString,
   base64ToArrayBuffer,
+  splitArrayBufferAt,
   stringToArrayBuffer,
 } from "arraybuffer-fns";
 import { Observable, of } from "rxjs";
@@ -68,13 +70,12 @@ export const DEFAULT_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
  *
- * @param aesKey instance of CryptoKey or in base64 format.
+ * @param aesKey instance of CryptoKey or in base64 format
  * @param data data to encrypt; Arraybuffer or string.
  * @param encryptParams (optional) defaults to DEFAULT_AES_KEY_CONFIG.
- * @returns Observable with encrypted data and initialization
- *   vector in base64 format.
+ * @returns encrypted string with prefixed iv as base64
  */
-export function encryptWithAes(
+export function encryptStringWithAes(
   aesKey: CryptoKey | string,
   data: ArrayBuffer | string,
   encryptParams:
@@ -84,12 +85,12 @@ export function encryptWithAes(
     | AesCmacParams
     | AesGcmParams
     | AesCfbParams = DEFAULT_ENCRYPT_PARAMS,
-): Observable<{ enc64: string; iv: string }> {
+): Observable<string> {
   if (typeof data === "string") {
     data = stringToArrayBuffer(data);
   }
 
-  const iv = window.crypto.getRandomValues(new Uint8Array(12));
+  const iv = window.crypto.getRandomValues(new Uint8Array(16));
 
   encryptParams = { ...encryptParams, iv };
 
@@ -97,11 +98,8 @@ export function encryptWithAes(
     switchMap((aes: CryptoKey) =>
       fromPromise(crypto.encrypt(encryptParams, aes, data as ArrayBuffer)),
     ),
+    map((buf: ArrayBuffer) => appendArrayBuffer(iv, buf)),
     map((buf: ArrayBuffer) => arrayBufferToBase64(buf)),
-    map((base64: string) => ({
-      enc64: base64,
-      iv: arrayBufferToBase64(iv),
-    })),
   );
 }
 
@@ -109,20 +107,15 @@ export const DEFAULT_DECRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
  *
- * @param aesKey instance of CryptoKey or in base64 format.
- * @param encData data to decrypt; ArrayBuffer of base64 string
- * @param iv initialization vector which was used for encryption
+ * @param aesKey instance of CryptoKey or in base64 format
+ * @param encData iv (first 16 bytes) with encrypted string as base64
  * @param decryptParams (optional) defaults to DEFAULT_AES_KEY_CONFIG
- * @returns Observable of decrypted data as string.
+ * @returns Observable of decrypted string
  *
- *   NOTE: The focus of this libary is currently onyl on string en-/decryption.
- *   If you want to use this libary for file encryption as well, please raise an
- *   issue and I will implement the necessary API for that.
  */
-export function decryptWithAes(
+export function decryptStringWithAes(
   aesKey: CryptoKey | string,
-  encData: ArrayBuffer | string,
-  iv: string,
+  encData: string,
   decryptParams:
     | RsaOaepParams
     | AesCtrParams
@@ -131,16 +124,13 @@ export function decryptWithAes(
     | AesGcmParams
     | AesCfbParams = DEFAULT_DECRYPT_PARAMS,
 ): Observable<string> {
-  if (typeof encData === "string") {
-    encData = base64ToArrayBuffer(encData);
-  }
-
-  const ivBuf = base64ToArrayBuffer(iv);
-  decryptParams = { ...decryptParams, iv: ivBuf };
+  const buf = base64ToArrayBuffer(encData)
+  const {buf1, buf2} = splitArrayBufferAt(buf, 16) // first 16 bytes are the iv
+  decryptParams = { ...decryptParams, iv: buf1 };
 
   return aesKeyToCryptoKey(aesKey).pipe(
     switchMap((aes: CryptoKey) =>
-      fromPromise(crypto.decrypt(decryptParams, aes, encData as ArrayBuffer)),
+      fromPromise(crypto.decrypt(decryptParams, aes, buf2)),
     ),
     map((buf: ArrayBuffer) => arrayBufferToString(buf)),
   );
