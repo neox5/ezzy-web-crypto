@@ -15,7 +15,7 @@ export const DEFAULT_PUBKEY_ENCRYPT_CONFIG = {
 };
 
 /**
- * 
+ *
  * @param pubkey as CryptoKey
  * @param data  as ArrayBuffer
  * @param encryptParams defaults to DEFAULT_PUBKEY_ENCRYPT_CONFIG
@@ -37,7 +37,7 @@ export function encryptWithPublicKey(
 }
 
 /**
- * 
+ *
  * @param pubkey as CryptoKey or base64 encoded string
  * @param data as string
  * @param encryptParams defaults to DEFAULT_PUBKEY_ENCRYPT_CONFIG
@@ -68,7 +68,7 @@ export const DEFAULT_SECKEY_DECRYPT_CONFIG = {
 };
 
 /**
- * 
+ *
  * @param seckey as CryptoKey
  * @param encData as ArrayBuffer
  * @param decryptParams defaults to DEFAULT_SECKEY_DECRYPT_CONFIG
@@ -90,7 +90,7 @@ export function decryptWithSecretKey(
 }
 
 /**
- * 
+ *
  * @param seckey as CryptoKey or base64 encoded string
  * @param encData as base64 encoded string
  * @param decryptParams defautls to DEFAULT_SECKEY_DECRYPT_CONFIG

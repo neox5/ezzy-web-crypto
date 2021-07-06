@@ -93,9 +93,13 @@ export function publicKeyToCryptoKey(
   }
 
   return fromPromise(
-    crypto.importKey("spki", base64ToArrayBuffer(publicKey), importParams, true, [
-      "wrapKey",
-    ]),
+    crypto.importKey(
+      "spki",
+      base64ToArrayBuffer(publicKey),
+      importParams,
+      true,
+      ["wrapKey"],
+    ),
   );
 }
 
@@ -120,8 +124,12 @@ export function privateKeyToCryptoKey(
   }
 
   return fromPromise(
-    crypto.importKey("pkcs8", base64ToArrayBuffer(privateKey), importParams, true, [
-      "unwrapKey",
-    ]),
+    crypto.importKey(
+      "pkcs8",
+      base64ToArrayBuffer(privateKey),
+      importParams,
+      true,
+      ["unwrapKey"],
+    ),
   );
 }

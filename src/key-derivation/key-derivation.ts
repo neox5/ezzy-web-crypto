@@ -91,10 +91,10 @@ export function aesFromPassword(
 // KEY DERIVATION AS BASE64
 // *****************************************************************************
 /**
- * 
+ *
  * @param password as string
  * @param salt (optional) as ArrayBuffer or base64 encoded string
- * @returns observable of object container AES and salt as base64 encoded 
+ * @returns observable of object container AES and salt as base64 encoded
  * strings
  */
 export function aesFromPasswordBase64(
