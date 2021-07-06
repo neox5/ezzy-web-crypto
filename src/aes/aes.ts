@@ -66,7 +66,9 @@ export function aesKeyToCryptoKey(
   );
 }
 
-export const DEFAULT_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
+export const DEFAULT_AES_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
+
+// export function encryptWithAes(aesKey: CryptoKey | string, data: ArrayBuffer) {}
 
 /**
  *
@@ -77,18 +79,16 @@ export const DEFAULT_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
  */
 export function encryptStringWithAes(
   aesKey: CryptoKey | string,
-  data: ArrayBuffer | string,
+  str: string,
   encryptParams:
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_ENCRYPT_PARAMS,
+    | AesCfbParams = DEFAULT_AES_ENCRYPT_PARAMS,
 ): Observable<string> {
-  if (typeof data === "string") {
-    data = stringToArrayBuffer(data);
-  }
+  const stringAsBuf = stringToArrayBuffer(str);
 
   const iv = window.crypto.getRandomValues(new Uint8Array(16));
 
@@ -96,14 +96,14 @@ export function encryptStringWithAes(
 
   return aesKeyToCryptoKey(aesKey).pipe(
     switchMap((aes: CryptoKey) =>
-      fromPromise(crypto.encrypt(encryptParams, aes, data as ArrayBuffer)),
+      fromPromise(crypto.encrypt(encryptParams, aes, stringAsBuf)),
     ),
     map((buf: ArrayBuffer) => appendArrayBuffer(iv, buf)),
     map((buf: ArrayBuffer) => arrayBufferToBase64(buf)),
   );
 }
 
-export const DEFAULT_DECRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
+export const DEFAULT_AES_DECRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
 
 /**
  *
@@ -122,7 +122,7 @@ export function decryptStringWithAes(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_DECRYPT_PARAMS,
+    | AesCfbParams = DEFAULT_AES_DECRYPT_PARAMS,
 ): Observable<string> {
   const buf = base64ToArrayBuffer(encData);
   const { buf1, buf2 } = splitArrayBufferAt(buf, 16); // first 16 bytes are the iv

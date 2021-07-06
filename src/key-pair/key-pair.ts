@@ -63,12 +63,12 @@ export function exportPublicKeyAsSpki(key: CryptoKey): Observable<ArrayBuffer> {
 
 /**
  *
- * @param pubKey instance of CryptoKey or in base64 format
+ * @param pubkey instance of CryptoKey or in base64 format
  * @param importParams (optional) defaults to RSA-OAEP with SHA-256
  * @returns Observable of public key as CryptoKey
  */
-export function pubKeyToCryptoKey(
-  pubKey: CryptoKey | string,
+export function pubkeyToCryptoKey(
+  pubkey: CryptoKey | string,
   importParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
@@ -77,12 +77,12 @@ export function pubKeyToCryptoKey(
     | DhImportKeyParams
     | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
 ): Observable<CryptoKey> {
-  if (pubKey instanceof CryptoKey) {
-    return of(pubKey);
+  if (pubkey instanceof CryptoKey) {
+    return of(pubkey);
   }
 
   return fromPromise(
-    crypto.importKey("spki", base64ToArrayBuffer(pubKey), importParams, true, [
+    crypto.importKey("spki", base64ToArrayBuffer(pubkey), importParams, true, [
       "wrapKey",
     ]),
   );

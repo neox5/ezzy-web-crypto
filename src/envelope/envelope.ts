@@ -4,7 +4,7 @@ import { map, switchMap } from "rxjs/operators";
 import { aesKeyToCryptoKey, DEFAULT_AES_KEY_CONFIG } from "../aes";
 import {
   DEFAULT_RSA_KEY_CONFIG,
-  pubKeyToCryptoKey,
+  pubkeyToCryptoKey,
   secKeyToCryptoKey,
 } from "../key-pair";
 import { fromPromise } from "../util/from-promise";
@@ -33,7 +33,7 @@ export function wrapEnvelope(
     | AesGcmParams
     | AesCfbParams = DEFAULT_WRAP_PARAMS,
 ): Observable<string> {
-  const pub$ = pubKeyToCryptoKey(pubKey);
+  const pub$ = pubkeyToCryptoKey(pubKey);
   const aes$ = aesKeyToCryptoKey(aesKey);
 
   return combineLatest([pub$, aes$]).pipe(
