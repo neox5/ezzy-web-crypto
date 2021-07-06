@@ -5,7 +5,7 @@ import {
 } from "arraybuffer-fns";
 import { Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
-import { pubkeyToCryptoKey, secKeyToCryptoKey } from "../key-pair";
+import { publicKeyToCryptoKey, privateKeyToCryptoKey } from "../key-pair";
 import { fromPromise } from "../util/from-promise";
 
 const crypto = window.crypto.subtle;
@@ -55,7 +55,7 @@ export function encryptStringWithPublicKey(
     | AesGcmParams
     | AesCfbParams = DEFAULT_PUBKEY_ENCRYPT_CONFIG,
 ): Observable<string> {
-  return pubkeyToCryptoKey(pubkey).pipe(
+  return publicKeyToCryptoKey(pubkey).pipe(
     switchMap((pub: CryptoKey) =>
       encryptWithPublicKey(pub, stringToArrayBuffer(data), encryptParams),
     ),
@@ -108,7 +108,7 @@ export function decryptStringWithSecretKey(
     | AesGcmParams
     | AesCfbParams = DEFAULT_SECKEY_DECRYPT_CONFIG,
 ): Observable<string> {
-  return secKeyToCryptoKey(seckey).pipe(
+  return privateKeyToCryptoKey(seckey).pipe(
     switchMap((sec: CryptoKey) =>
       decryptWithSecretKey(sec, stringToArrayBuffer(encData), decryptParams),
     ),
