@@ -8,6 +8,7 @@ import {
 import { Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { aesCryptoKeyToBase64 } from "../aes";
+import { createSalt } from "../salt/salt";
 import { fromPromise } from "../util/from-promise";
 
 const crypto = window.crypto.subtle;
@@ -35,10 +36,6 @@ export function cryptoKeyFromPassword(
       keyUsages,
     ),
   );
-}
-
-export function createSalt(): ArrayBuffer {
-  return window.crypto.getRandomValues(new Uint8Array(16)) as ArrayBuffer;
 }
 
 /**
