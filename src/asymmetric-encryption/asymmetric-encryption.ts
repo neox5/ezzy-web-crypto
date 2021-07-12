@@ -10,7 +10,7 @@ import { fromPromise } from "../util/from-promise";
 
 const crypto = window.crypto.subtle;
 
-export const DEFAULT_PUBKEY_ENCRYPT_CONFIG = {
+export const DEFAULT_PUBLICKEY_ENCRYPT_CONFIG = {
   name: "RSA-OAEP",
 };
 
@@ -18,11 +18,11 @@ export const DEFAULT_PUBKEY_ENCRYPT_CONFIG = {
  *
  * @param pubkey as CryptoKey
  * @param data  as ArrayBuffer
- * @param encryptParams defaults to DEFAULT_PUBKEY_ENCRYPT_CONFIG
+ * @param encryptParams defaults to DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
  * @returns observable of encrypted data as ArrayBuffer
  */
 export function encryptWithPublicKey(
-  pubkey: CryptoKey,
+  pubkey: CryptoKey | string,
   data: ArrayBuffer,
   encryptParams:
     | AlgorithmIdentifier
@@ -31,16 +31,21 @@ export function encryptWithPublicKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBKEY_ENCRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG,
 ): Observable<ArrayBuffer> {
-  return fromPromise(crypto.encrypt(encryptParams, pubkey, data));
+  return publicKeyToCryptoKey(pubkey).pipe(
+    switchMap((pub: CryptoKey) =>
+      fromPromise(crypto.encrypt(encryptParams, pub, data)),
+    ),
+    map((buf: ArrayBuffer) => buf), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+  );
 }
 
 /**
  *
  * @param pubkey as CryptoKey or base64 encoded string
  * @param data as string
- * @param encryptParams defaults to DEFAULT_PUBKEY_ENCRYPT_CONFIG
+ * @param encryptParams defaults to DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
  * @returns observable of encrypted string
  */
 export function encryptStringWithPublicKey(
@@ -53,29 +58,28 @@ export function encryptStringWithPublicKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBKEY_ENCRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG,
 ): Observable<string> {
-  return publicKeyToCryptoKey(pubkey).pipe(
-    switchMap((pub: CryptoKey) =>
-      encryptWithPublicKey(pub, stringToArrayBuffer(data), encryptParams),
-    ),
-    map((buf: ArrayBuffer) => arrayBufferToBase64(buf)),
-  );
+  return encryptWithPublicKey(
+    pubkey,
+    stringToArrayBuffer(data),
+    encryptParams,
+  ).pipe(map((buf: ArrayBuffer) => arrayBufferToBase64(buf)));
 }
 
-export const DEFAULT_SECKEY_DECRYPT_CONFIG = {
+export const DEFAULT_PRIVATEKEY_DECRYPT_CONFIG = {
   name: "RSA_OAEP",
 };
 
 /**
  *
- * @param seckey as CryptoKey
+ * @param privateKey as CryptoKey
  * @param encData as ArrayBuffer
- * @param decryptParams defaults to DEFAULT_SECKEY_DECRYPT_CONFIG
+ * @param decryptParams defaults to DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
  * @returns observable of decrypted ArrayBuffer
  */
-export function decryptWithSecretKey(
-  seckey: CryptoKey,
+export function decryptWithPrivateKey(
+  privateKey: CryptoKey | string,
   encData: ArrayBuffer,
   decryptParams:
     | AlgorithmIdentifier
@@ -84,20 +88,25 @@ export function decryptWithSecretKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_SECKEY_DECRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG,
 ): Observable<ArrayBuffer> {
-  return fromPromise(crypto.decrypt(decryptParams, seckey, encData));
+  return privateKeyToCryptoKey(privateKey).pipe(
+    switchMap((priv: CryptoKey) =>
+      fromPromise(crypto.decrypt(decryptParams, priv, encData)),
+    ),
+    map((buf: ArrayBuffer) => buf), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+  );
 }
 
 /**
  *
- * @param seckey as CryptoKey or base64 encoded string
+ * @param privateKey as CryptoKey or base64 encoded string
  * @param encData as base64 encoded string
- * @param decryptParams defautls to DEFAULT_SECKEY_DECRYPT_CONFIG
+ * @param decryptParams defautls to DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
  * @returns observable of decrypted string
  */
 export function decryptStringWithSecretKey(
-  seckey: CryptoKey | string,
+  privateKey: CryptoKey | string,
   encData: string,
   decryptParams:
     | AlgorithmIdentifier
@@ -106,12 +115,11 @@ export function decryptStringWithSecretKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_SECKEY_DECRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG,
 ): Observable<string> {
-  return privateKeyToCryptoKey(seckey).pipe(
-    switchMap((sec: CryptoKey) =>
-      decryptWithSecretKey(sec, stringToArrayBuffer(encData), decryptParams),
-    ),
-    map((buf: ArrayBuffer) => arrayBufferToString(buf)),
-  );
+  return decryptWithPrivateKey(
+    privateKey,
+    stringToArrayBuffer(encData),
+    decryptParams,
+  ).pipe(map((buf: ArrayBuffer) => arrayBufferToString(buf)));
 }
