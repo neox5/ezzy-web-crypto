@@ -72,7 +72,7 @@ export function aesFromPassword(
           derivationConfig,
           key,
           { name: "AES-GCM", length: 256 },
-          false,
+          true, // otherwise it can not be exported
           ["encrypt", "decrypt"],
         ),
       ),
