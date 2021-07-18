@@ -31,7 +31,7 @@ export function generateKeyPair(
   extractable: boolean = true,
 ): Observable<CryptoKeyPair> {
   return fromPromise(
-    crypto.generateKey(params, extractable, ["wrapKey", "unwrapKey"]),
+    crypto.generateKey(params, extractable, ["wrapKey", "unwrapKey", "encrypt", "decrypt"]),
   );
 }
 
