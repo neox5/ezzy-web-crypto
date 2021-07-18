@@ -105,7 +105,7 @@ export function decryptWithPrivateKey(
  * @param decryptParams defautls to DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
  * @returns observable of decrypted string
  */
-export function decryptStringWithSecretKey(
+export function decryptStringWithPrivateKey(
   privateKey: CryptoKey | string,
   encData: string,
   decryptParams:
