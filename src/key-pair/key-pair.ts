@@ -103,7 +103,7 @@ export function publicKeyToCryptoKey(
       base64ToArrayBuffer(publicKey),
       importParams,
       true,
-      ["wrapKey"],
+      ["wrapKey", "encrypt"],
     ),
   );
 }
@@ -134,7 +134,7 @@ export function privateKeyToCryptoKey(
       base64ToArrayBuffer(privateKey),
       importParams,
       true,
-      ["unwrapKey"],
+      ["unwrapKey", "decrypt"],
     ),
   );
 }
