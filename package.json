@@ -1,6 +1,6 @@
 {
   "name": "ezzy-web-crypto",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A wrapper library for envelope encrytion using the WebCrypto API",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

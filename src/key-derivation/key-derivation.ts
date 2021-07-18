@@ -57,7 +57,7 @@ export function aesFromPassword(
     }
     freshSalt = salt; // if salt parameter set use it instead of freshSalt
   }
-  
+
   const derivationConfig = {
     name: "PBKDF2",
     salt: freshSalt,
