@@ -50,17 +50,17 @@ export function aesFromPassword(
   salt?: ArrayBuffer | string,
 ): Observable<{ aes: CryptoKey; salt: ArrayBuffer }> {
   let freshSalt = createSalt(); // create fresh salt
-  console.log("first freshsalt:", freshSalt)
-  console.log("first salt:", salt)
-  
+  console.log("first freshsalt:", freshSalt);
+  console.log("first salt:", salt);
+
   if (salt) {
     if (typeof salt === "string") {
       salt = base64ToArrayBuffer(salt);
-      console.log("after base64 salt:", salt)
+      console.log("after base64 salt:", salt);
     }
     freshSalt = salt; // if salt parameter set use it instead of freshSalt
   }
-  console.log("after freshsalt:", freshSalt)
+  console.log("after freshsalt:", freshSalt);
   const derivationConfig = {
     name: "PBKDF2",
     freshSalt,
