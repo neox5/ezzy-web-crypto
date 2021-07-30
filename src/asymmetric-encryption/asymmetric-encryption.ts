@@ -1,6 +1,7 @@
 import {
   arrayBufferToBase64,
   arrayBufferToString,
+  base64ToArrayBuffer,
   stringToArrayBuffer,
 } from "arraybuffer-fns";
 import { Observable } from "rxjs";
@@ -119,7 +120,7 @@ export function decryptStringWithPrivateKey(
 ): Observable<string> {
   return decryptWithPrivateKey(
     privateKey,
-    stringToArrayBuffer(encData),
+    base64ToArrayBuffer(encData),
     decryptParams,
   ).pipe(map((buf: ArrayBuffer) => arrayBufferToString(buf)));
 }
