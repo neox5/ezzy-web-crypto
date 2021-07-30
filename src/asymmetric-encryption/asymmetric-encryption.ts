@@ -68,7 +68,7 @@ export function encryptStringWithPublicKey(
 }
 
 export const DEFAULT_PRIVATEKEY_DECRYPT_CONFIG = {
-  name: "RSA_OAEP",
+  name: "RSA-OAEP",
 };
 
 /**
