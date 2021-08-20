@@ -11,10 +11,10 @@ export type HashAlgorithm = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
 // HASHING
 // *****************************************************************************
 /**
- * 
- * @param algorithm defines the hashing algorithm, like SHA-1, SHA-256, SHA-384 
+ *
+ * @param algorithm defines the hashing algorithm, like SHA-1, SHA-256, SHA-384
  * or SHA-512
- * @param data as ArrayBuffer 
+ * @param data as ArrayBuffer
  * @returns observable of hash as ArrayBuffer
  */
 export function generateSHA(
@@ -25,8 +25,8 @@ export function generateSHA(
 }
 
 /**
- * 
- * @param algorithm defines the hashing algorithm, like SHA-1, SHA-256, SHA-384 
+ *
+ * @param algorithm defines the hashing algorithm, like SHA-1, SHA-256, SHA-384
  * or SHA-512
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
@@ -45,8 +45,8 @@ export function generateSHAFromString(
 // SHA-1
 // *****************************************************************************
 /**
- * 
- * @param data as ArrayBuffer 
+ *
+ * @param data as ArrayBuffer
  * @returns observable of hash as ArrayBuffer
  */
 export function generateSHA1(data: ArrayBuffer): Observable<ArrayBuffer> {
@@ -54,20 +54,20 @@ export function generateSHA1(data: ArrayBuffer): Observable<ArrayBuffer> {
 }
 
 /**
- * 
+ *
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
 export function generateSHA1FromString(str: string): Observable<string> {
-  return generateSHAFromString("SHA-1", str)
+  return generateSHAFromString("SHA-1", str);
 }
 
 // *****************************************************************************
 // SHA-256
 // *****************************************************************************
 /**
- * 
- * @param data as ArrayBuffer 
+ *
+ * @param data as ArrayBuffer
  * @returns observable of hash as ArrayBuffer
  */
 export function generateSHA256(data: ArrayBuffer): Observable<ArrayBuffer> {
@@ -75,20 +75,20 @@ export function generateSHA256(data: ArrayBuffer): Observable<ArrayBuffer> {
 }
 
 /**
- * 
+ *
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
 export function generateSHA256FromString(str: string): Observable<string> {
-  return generateSHAFromString("SHA-256", str)
+  return generateSHAFromString("SHA-256", str);
 }
 
 // *****************************************************************************
 // SHA-384
 // *****************************************************************************
 /**
- * 
- * @param data as ArrayBuffer 
+ *
+ * @param data as ArrayBuffer
  * @returns observable of hash as ArrayBuffer
  */
 export function generateSHA384(data: ArrayBuffer): Observable<ArrayBuffer> {
@@ -96,20 +96,20 @@ export function generateSHA384(data: ArrayBuffer): Observable<ArrayBuffer> {
 }
 
 /**
- * 
+ *
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
 export function generateSHA384FromString(str: string): Observable<string> {
-  return generateSHAFromString("SHA-384", str)
+  return generateSHAFromString("SHA-384", str);
 }
 
 // *****************************************************************************
 // SHA-512
 // *****************************************************************************
 /**
- * 
- * @param data as ArrayBuffer 
+ *
+ * @param data as ArrayBuffer
  * @returns observable of hash as ArrayBuffer
  */
 export function generateSHA512(data: ArrayBuffer): Observable<ArrayBuffer> {
@@ -117,10 +117,10 @@ export function generateSHA512(data: ArrayBuffer): Observable<ArrayBuffer> {
 }
 
 /**
- * 
+ *
  * @param str the string to generate hash from
  * @returns observable of hash as base64 encoded string
  */
 export function generateSHA512FromString(str: string): Observable<string> {
-  return generateSHAFromString("SHA-512", str)
+  return generateSHAFromString("SHA-512", str);
 }
