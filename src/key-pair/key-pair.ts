@@ -24,9 +24,7 @@ export const DEFAULT_RSA_KEY_CONFIG = {
 };
 
 export function generateKeyPair(
-  params:
-    | RsaHashedKeyGenParams
-    | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
+  params: RsaHashedKeyGenParams | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKeyPair> {
   return fromPromise(
@@ -40,9 +38,7 @@ export function generateKeyPair(
 }
 
 export function generateKeyPairBase64(
-  params:
-    | RsaHashedKeyGenParams
-    | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
+  params: RsaHashedKeyGenParams | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKeyPairBase64> {
   return generateKeyPair(params, extractable).pipe(
