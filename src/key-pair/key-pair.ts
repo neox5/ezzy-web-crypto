@@ -26,8 +26,7 @@ export const DEFAULT_RSA_KEY_CONFIG = {
 export function generateKeyPair(
   params:
     | RsaHashedKeyGenParams
-    | EcKeyGenParams
-    | DhKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
+    | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKeyPair> {
   return fromPromise(
@@ -43,8 +42,7 @@ export function generateKeyPair(
 export function generateKeyPairBase64(
   params:
     | RsaHashedKeyGenParams
-    | EcKeyGenParams
-    | DhKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
+    | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
   extractable: boolean = true,
 ): Observable<CryptoKeyPairBase64> {
   return generateKeyPair(params, extractable).pipe(
@@ -90,7 +88,6 @@ export function publicKeyToCryptoKey(
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | DhImportKeyParams
     | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
 ): Observable<CryptoKey> {
   if (publicKey instanceof CryptoKey) {
@@ -121,7 +118,6 @@ export function privateKeyToCryptoKey(
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | DhImportKeyParams
     | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
 ): Observable<CryptoKey> {
   if (privateKey instanceof CryptoKey) {

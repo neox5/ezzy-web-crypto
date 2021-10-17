@@ -62,8 +62,12 @@ export function generateAesKeyBase64(
 // *****************************************************************************
 // KEY CONVERSION
 // *****************************************************************************
+export function aesCryptoKeyToRaw(aesKey: CryptoKey): Observable<ArrayBuffer> {
+  return fromPromise(crypto.exportKey("raw", aesKey));
+}
+
 export function aesCryptoKeyToBase64(aesKey: CryptoKey): Observable<string> {
-  return fromPromise(crypto.exportKey("raw", aesKey)).pipe(
+  return aesCryptoKeyToRaw(aesKey).pipe(
     map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
   );
 }
@@ -111,9 +115,7 @@ export function encryptWithAes(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_AES_ENCRYPT_PARAMS,
+    | AesGcmParams = DEFAULT_AES_ENCRYPT_PARAMS,
 ): Observable<ArrayBuffer> {
   const iv = window.crypto.getRandomValues(new Uint8Array(16));
 
@@ -144,9 +146,7 @@ export function decryptWithAes(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_AES_DECRYPT_PARAMS,
+    | AesGcmParams = DEFAULT_AES_DECRYPT_PARAMS,
 ): Observable<ArrayBuffer> {
   const { buf1, buf2 } = splitArrayBufferAt(encData, 16); // first 16 bytes are the iv
   decryptParams = { ...decryptParams, iv: buf1 };
@@ -176,9 +176,7 @@ export function encryptStringWithAes(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_AES_ENCRYPT_PARAMS,
+    | AesGcmParams = DEFAULT_AES_ENCRYPT_PARAMS,
 ): Observable<string> {
   const stringAsBuf = stringToArrayBuffer(str);
 
@@ -202,9 +200,7 @@ export function decryptStringWithAes(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_AES_DECRYPT_PARAMS,
+    | AesGcmParams = DEFAULT_AES_DECRYPT_PARAMS,
 ): Observable<string> {
   return decryptWithAes(
     aesKey,
