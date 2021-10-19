@@ -25,7 +25,7 @@ export const DEFAULT_RSA_KEY_CONFIG = {
 
 export function generateKeyPair(
   params: RsaHashedKeyGenParams | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
-  extractable: boolean = true,
+  extractable = true
 ): Observable<CryptoKeyPair> {
   return fromPromise(
     crypto.generateKey(params, extractable, [
@@ -33,25 +33,25 @@ export function generateKeyPair(
       "unwrapKey",
       "encrypt",
       "decrypt",
-    ]),
+    ])
   );
 }
 
 export function generateKeyPairBase64(
   params: RsaHashedKeyGenParams | EcKeyGenParams = DEFAULT_RSA_KEY_CONFIG,
-  extractable: boolean = true,
+  extractable = true
 ): Observable<CryptoKeyPairBase64> {
   return generateKeyPair(params, extractable).pipe(
     switchMap((kp: CryptoKeyPair) =>
       zip(
         exportPrivateKeyAsPkcs8(kp.privateKey),
-        exportPublicKeyAsSpki(kp.publicKey),
-      ),
+        exportPublicKeyAsSpki(kp.publicKey)
+      )
     ),
     map(([pkcs8, spki]) => ({
       private: arrayBufferToBase64(pkcs8),
       public: arrayBufferToBase64(spki),
-    })),
+    }))
   );
 }
 
@@ -59,7 +59,7 @@ export function generateKeyPairBase64(
 // KEY EXPORT
 // *****************************************************************************
 export function exportPrivateKeyAsPkcs8(
-  key: CryptoKey,
+  key: CryptoKey
 ): Observable<ArrayBuffer> {
   return fromPromise(crypto.exportKey("pkcs8", key));
 }
@@ -84,7 +84,7 @@ export function publicKeyToCryptoKey(
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
+    | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" }
 ): Observable<CryptoKey> {
   if (publicKey instanceof CryptoKey) {
     return of(publicKey);
@@ -96,8 +96,8 @@ export function publicKeyToCryptoKey(
       base64ToArrayBuffer(publicKey),
       importParams,
       true,
-      ["wrapKey", "encrypt"],
-    ),
+      ["wrapKey", "encrypt"]
+    )
   );
 }
 
@@ -114,7 +114,7 @@ export function privateKeyToCryptoKey(
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" },
+    | AesKeyAlgorithm = { name: "RSA-OAEP", hash: "SHA-256" }
 ): Observable<CryptoKey> {
   if (privateKey instanceof CryptoKey) {
     return of(privateKey);
@@ -126,7 +126,7 @@ export function privateKeyToCryptoKey(
       base64ToArrayBuffer(privateKey),
       importParams,
       true,
-      ["unwrapKey", "decrypt"],
-    ),
+      ["unwrapKey", "decrypt"]
+    )
   );
 }

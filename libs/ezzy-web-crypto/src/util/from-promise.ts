@@ -12,7 +12,7 @@ export function fromPromise<T>(promise: PromiseLike<T>): Observable<T> {
             subscriber.complete();
           }
         },
-        (err: any) => subscriber.error(err),
+        (err) => subscriber.error(err)
       )
       .then(null, (err) => {
         throw err;

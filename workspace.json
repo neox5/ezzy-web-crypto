@@ -1,0 +1,62 @@
+{
+  "version": 2,
+  "projects": {
+    "ezzy-web-crypto": {
+      "root": "libs/ezzy-web-crypto",
+      "sourceRoot": "libs/ezzy-web-crypto/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/ezzy-web-crypto/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/ezzy-web-crypto"],
+          "options": {
+            "jestConfig": "libs/ezzy-web-crypto/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/ezzy-web-crypto",
+            "tsConfig": "libs/ezzy-web-crypto/tsconfig.lib.json",
+            "packageJson": "libs/ezzy-web-crypto/package.json",
+            "main": "libs/ezzy-web-crypto/src/index.ts",
+            "assets": [
+              "libs/ezzy-web-crypto/*.md",
+              "libs/ezzy-web-crypto/LICENSE"
+            ]
+          }
+        },
+        "version-patch": {
+          "executor": "@nrwl/workspace:run-script",
+          "options": {
+            "script": "version-patch"
+          }
+        },
+        "version-minor": {
+          "executor": "@nrwl/workspace:run-script",
+          "options": {
+            "script": "version-minor"
+          }
+        },
+        "version-major": {
+          "executor": "@nrwl/workspace:run-script",
+          "options": {
+            "script": "version-major"
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/workspace"
+  }
+}

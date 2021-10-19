@@ -19,7 +19,7 @@ export type HashAlgorithm = "SHA-1" | "SHA-256" | "SHA-384" | "SHA-512";
  */
 export function generateSHA(
   algorithm: HashAlgorithm,
-  data: ArrayBuffer,
+  data: ArrayBuffer
 ): Observable<ArrayBuffer> {
   return fromPromise(crypto.digest(algorithm, data));
 }
@@ -33,11 +33,11 @@ export function generateSHA(
  */
 export function generateSHAFromString(
   algorithm: HashAlgorithm,
-  str: string,
+  str: string
 ): Observable<string> {
   return of(stringToArrayBuffer(str)).pipe(
     switchMap((data: ArrayBuffer) => generateSHA(algorithm, data)),
-    map((hash: ArrayBuffer) => arrayBufferToBase64(hash)),
+    map((hash: ArrayBuffer) => arrayBufferToBase64(hash))
   );
 }
 

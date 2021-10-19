@@ -1,0 +1,24 @@
+{
+  "name": "ezzy-web-crypto",
+  "version": "1.4.2",
+  "description": "A wrapper library for envelope encrytion using the WebCrypto API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neox5/ezzy-web-crypto.git"
+  },
+  "keywords": [
+    "webcrypto",
+    "webcrypto api",
+    "envelope",
+    "envelope encryption",
+    "cryptography",
+    "rsa",
+    "aes"
+  ],
+  "author": "Christian Faustmann / neox5, <faustmannchr@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/neox5/ezzy-web-crypto/issues"
+  },
+  "homepage": "https://github.com/neox5/ezzy-web-crypto#readme"
+}

@@ -32,13 +32,13 @@ export function encryptWithPublicKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
 ): Observable<ArrayBuffer> {
   return publicKeyToCryptoKey(pubkey).pipe(
     switchMap((pub: CryptoKey) =>
-      fromPromise(crypto.encrypt(encryptParams, pub, data)),
+      fromPromise(crypto.encrypt(encryptParams, pub, data))
     ),
-    map((buf: ArrayBuffer) => buf), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((buf: ArrayBuffer) => buf) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }
 
@@ -59,12 +59,12 @@ export function encryptStringWithPublicKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
 ): Observable<string> {
   return encryptWithPublicKey(
     pubkey,
     stringToArrayBuffer(data),
-    encryptParams,
+    encryptParams
   ).pipe(map((buf: ArrayBuffer) => arrayBufferToBase64(buf)));
 }
 
@@ -89,13 +89,13 @@ export function decryptWithPrivateKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
 ): Observable<ArrayBuffer> {
   return privateKeyToCryptoKey(privateKey).pipe(
     switchMap((priv: CryptoKey) =>
-      fromPromise(crypto.decrypt(decryptParams, priv, encData)),
+      fromPromise(crypto.decrypt(decryptParams, priv, encData))
     ),
-    map((buf: ArrayBuffer) => buf), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((buf: ArrayBuffer) => buf) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }
 
@@ -116,11 +116,11 @@ export function decryptStringWithPrivateKey(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG,
+    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
 ): Observable<string> {
   return decryptWithPrivateKey(
     privateKey,
     base64ToArrayBuffer(encData),
-    decryptParams,
+    decryptParams
   ).pipe(map((buf: ArrayBuffer) => arrayBufferToString(buf)));
 }

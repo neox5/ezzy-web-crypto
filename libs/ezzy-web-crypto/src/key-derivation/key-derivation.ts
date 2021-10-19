@@ -25,7 +25,7 @@ const crypto = window.crypto.subtle;
  */
 export function cryptoKeyFromPassword(
   pass: string,
-  keyUsages: KeyUsage[],
+  keyUsages: KeyUsage[]
 ): Observable<CryptoKey> {
   return fromPromise(
     crypto.importKey(
@@ -33,8 +33,8 @@ export function cryptoKeyFromPassword(
       stringToArrayBuffer(pass),
       "PBKDF2",
       false,
-      keyUsages,
-    ),
+      keyUsages
+    )
   );
 }
 
@@ -47,7 +47,7 @@ export function cryptoKeyFromPassword(
  */
 export function aesFromPassword(
   password: string,
-  salt?: ArrayBuffer | string,
+  salt?: ArrayBuffer | string
 ): Observable<{ aes: CryptoKey; salt: ArrayBuffer }> {
   let freshSalt = createSalt(); // create fresh salt
 
@@ -73,14 +73,14 @@ export function aesFromPassword(
           key,
           { name: "AES-GCM", length: 256 },
           true, // otherwise it can not be exported
-          ["encrypt", "decrypt"],
-        ),
-      ),
+          ["encrypt", "decrypt"]
+        )
+      )
     ),
     map((aes: CryptoKey) => ({
       aes,
       salt: freshSalt,
-    })),
+    }))
   );
 }
 
@@ -96,7 +96,7 @@ export function aesFromPassword(
  */
 export function aesFromPasswordBase64(
   password: string,
-  salt?: ArrayBuffer | string,
+  salt?: ArrayBuffer | string
 ): Observable<{ aesBase64: string; saltBase64: string }> {
   return aesFromPassword(password, salt).pipe(
     switchMap((data: { aes: CryptoKey; salt: ArrayBuffer }) =>
@@ -104,9 +104,9 @@ export function aesFromPasswordBase64(
         map((aesBase64: string) => ({
           aesBase64,
           saltBase64: arrayBufferToBase64(data.salt),
-        })),
-      ),
+        }))
+      )
     ),
-    map((data: { aesBase64: string; saltBase64: string }) => data), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((data: { aesBase64: string; saltBase64: string }) => data) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }

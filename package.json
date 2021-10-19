@@ -1,56 +1,37 @@
 {
   "name": "ezzy-web-crypto",
-  "version": "1.4.0",
-  "description": "A wrapper library for envelope encrytion using the WebCrypto API",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "scripts": {
-    "build": "tsc",
-    "format": "prettier --write 'src/**/*.ts'",
-    "format:check": "prettier 'src/**/*.ts'",
-    "lint": "eslint 'src/**/*.ts'",
-    "lint:fix": "eslint --fix 'src/**/*.ts'",
-    "test": "jest --passWithNoTests",
-    "prepare": "npm run build",
-    "prepublishOnly": "npm test && npm run lint",
-    "preversion": "npm run lint",
-    "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/neox5/ezzy-web-crypto.git"
-  },
-  "keywords": [
-    "webcrypto",
-    "webcrypto api",
-    "envelope",
-    "envelope encryption",
-    "cryptography",
-    "rsa",
-    "aes"
-  ],
-  "author": "Christian Faustmann / neox5, <faustmannchr@gmail.com>",
+  "version": "1.4.2",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/neox5/ezzy-web-crypto/issues"
+  "scripts": {
+    "format": "nx format affected",
+    "lint": "nx run ezzy-web-crypto:lint",
+    "build": "nx run ezzy-web-crypto:build",
+    "test": "nx run ezzy-web-crypto:test"
   },
-  "homepage": "https://github.com/neox5/ezzy-web-crypto#readme",
+  "private": true,
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "@typescript-eslint/parser": "^4.26.0",
-    "eslint": "^7.28.0",
-    "jest": "^27.0.4",
+    "@nrwl/angular": "^12.10.0",
+    "@nrwl/cli": "12.10.0",
+    "@nrwl/eslint-plugin-nx": "12.10.0",
+    "@nrwl/jest": "12.10.0",
+    "@nrwl/linter": "12.10.0",
+    "@nrwl/node": "^12.10.0",
+    "@nrwl/tao": "12.10.0",
+    "@nrwl/workspace": "12.10.0",
+    "@types/jest": "27.0.2",
+    "@types/node": "14.14.33",
+    "@typescript-eslint/eslint-plugin": "~4.31.1",
+    "@typescript-eslint/parser": "~4.31.1",
+    "eslint": "7.22.0",
+    "eslint-config-prettier": "8.1.0",
+    "jest": "27.2.3",
     "prettier": "^2.3.1",
-    "ts-jest": "^27.0.2",
-    "typescript": "^4.3.2"
+    "ts-jest": "27.0.5",
+    "typescript": "~4.3.5"
   },
-  "files": [
-    "lib/**/*"
-  ],
   "dependencies": {
     "arraybuffer-fns": "^1.1.2",
-    "rxjs": "^6.6.7"
+    "rxjs": "^6.6.7",
+    "tslib": "^2.0.0"
   }
 }

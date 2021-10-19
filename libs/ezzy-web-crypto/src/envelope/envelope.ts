@@ -34,7 +34,7 @@ export function wrapAesInEnvelope(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_WRAP_PARAMS,
+    | AesCfbParams = DEFAULT_WRAP_PARAMS
 ): Observable<ArrayBuffer> {
   const pub$ = publicKeyToCryptoKey(publicKey);
   const aes$ = aesKeyToCryptoKey(aesKey);
@@ -42,10 +42,10 @@ export function wrapAesInEnvelope(
   return combineLatest([pub$, aes$]).pipe(
     switchMap(([pub, aes]) =>
       fromPromise(
-        crypto.wrapKey("raw", aes as CryptoKey, pub as CryptoKey, wrapParams),
-      ),
+        crypto.wrapKey("raw", aes as CryptoKey, pub as CryptoKey, wrapParams)
+      )
     ),
-    map((raw: ArrayBuffer) => raw), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((raw: ArrayBuffer) => raw) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
     // map((raw: ArrayBuffer) => arrayBufferToBase64(raw)),
   );
 }
@@ -78,7 +78,7 @@ export function unwrapEnvelope(
     | EcKeyImportParams
     | HmacImportParams
     | DhImportKeyParams
-    | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS,
+    | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS
 ): Observable<CryptoKey> {
   return privateKeyToCryptoKey(privateKey).pipe(
     switchMap((sec: CryptoKey) =>
@@ -90,11 +90,11 @@ export function unwrapEnvelope(
           unwrapParams,
           unwrappedKeyParams,
           true,
-          ["decrypt", "encrypt"],
-        ),
-      ),
+          ["decrypt", "encrypt"]
+        )
+      )
     ),
-    map((value: CryptoKey) => value), // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((value: CryptoKey) => value) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }
 
@@ -119,10 +119,10 @@ export function wrapAesInBase64Envelope(
     | AesCbcParams
     | AesCmacParams
     | AesGcmParams
-    | AesCfbParams = DEFAULT_WRAP_PARAMS,
+    | AesCfbParams = DEFAULT_WRAP_PARAMS
 ): Observable<string> {
   return wrapAesInEnvelope(publicKey, aesKey, wrapParams).pipe(
-    map((envelope: ArrayBuffer) => arrayBufferToBase64(envelope)),
+    map((envelope: ArrayBuffer) => arrayBufferToBase64(envelope))
   );
 }
 
@@ -151,12 +151,12 @@ export function unwrapBase64Envelope(
     | EcKeyImportParams
     | HmacImportParams
     | DhImportKeyParams
-    | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS,
+    | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS
 ): Observable<CryptoKey> {
   return unwrapEnvelope(
     base64ToArrayBuffer(envelope),
     privateKey,
     unwrapParams,
-    unwrappedKeyParams,
+    unwrappedKeyParams
   );
 }
