@@ -1,0 +1,18 @@
+/**
+ * MEDIA QUERY MIXIN
+ * Pass in the key of one of your breakpoints set in `$sb-config['breakpoints']`
+ * and this mixin will generate the @media query with your configured value.
+ *
+ * @param {string} $key - The key of your configured breakpoint
+ */
+@mixin media-query($key) {
+  $matched-breakpoint: map-get($media-breakpoints, $key);
+
+  @if not $matched-breakpoint {
+    @warn #{ 'Breakpoint, ‘' + $key + '’ not found in `$sb-config`. Make sure it’s set in the ‘breakpoints’ section.' };
+  } @else {
+    @media #{ $matched-breakpoint } {
+      @content;
+    }
+  }
+}

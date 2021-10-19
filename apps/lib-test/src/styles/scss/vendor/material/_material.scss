@@ -1,0 +1,42 @@
+@use "~@angular/material" as mat;
+@use "variables";
+@use "palette" as palette;
+
+@include mat.core();
+
+// color definition
+$theme-primary: mat.define-palette(palette.$primary, 500, 100, 900);
+$theme-accent: mat.define-palette(palette.$analogous2, 500);
+$theme-warn: mat.define-palette(palette.$complementary, 500);
+
+$flustron-light-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $theme-primary,
+      accent: $theme-accent,
+      warn: $theme-warn,
+    ),
+  )
+);
+
+// @include mat.core-theme($flustron-light-theme);
+@include mat.all-component-themes($flustron-light-theme);
+
+// Specific component overrides, pieces that are not in line with the general theming
+.mat-icon-button:hover .mat-button-focus-overlay {
+  opacity: 0.1 !important;
+}
+
+// Toolbar
+.mat-toolbar {
+  max-height: 48px;
+  position: relative;
+  padding: 12px !important;
+  z-index: 2;
+  @include mat.elevation(4);
+}
+
+//Disable stepper-header
+.mat-horizontal-stepper-header {
+  pointer-events: none !important;
+}

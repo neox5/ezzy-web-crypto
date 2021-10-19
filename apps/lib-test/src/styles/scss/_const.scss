@@ -1,0 +1,62 @@
+// =============================================================================
+// COLORS
+// =============================================================================
+$color-success: #08c908;
+$color-failure: #c90808;
+$color-default: #087cc9;
+$color-default-dark: #06619e;
+
+$color-primary-muted: rgba(0, 159, 82, 0.2);
+
+// font:
+$font-color: #000;
+$font-color-muted: rgba(0, 0, 0, 0.66);
+
+// backgrounds
+$color-bg: #fafafa;
+
+// =============================================================================
+// FONT
+// =============================================================================
+// fontstack 2020: https://medium.com/@masakudamatsu/survey-system-font-stack-5f73a3b39776
+// stylelint-disable-next-line value-keyword-case
+$font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  "Helvetica Neue", arial, sans-serif;
+
+// =============================================================================
+// ANIMATION
+// =============================================================================
+$transition-duration: 300ms;
+$ease-in-out-quad: cubic-bezier(0.455, 0.03, 0.515, 0.955);
+
+// =============================================================================
+// RESPONSIVE
+// =============================================================================
+$breakpoints: (
+  na: 0px,
+  // For BS grid
+  xs: 320px,
+  // Smartphone
+  sm: 600px,
+  // Tablets
+  md: 900px,
+  // Tablets Landscape and small desktops
+  lg: 1200px,
+  // Desktops
+  xl: 1800px,
+  // Large Desktop
+);
+$media-breakpoints: (
+  na: "(min-width: 0px)",
+  // For BS grid
+  xs: "(min-width: 320px)",
+  // Smartphone
+  sm: "(min-width: 600px)",
+  // Tablets
+  md: "(min-width: 900px)",
+  // Tablets Landscape and small desktops
+  lg: "(min-width: 1200px)",
+  // Desktops
+  xl: "(min-width: 1800px)",
+  // Large Desktop
+);

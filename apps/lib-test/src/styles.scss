@@ -1,3 +1,10 @@
-$color-success: #08c908;
-$color-failure: #c90808;
-$color-default: #087cc9;
+@import "./styles/scss/reset";
+@import "./styles/scss/const";
+@import "./styles/scss/helpers/helpers";
+@import "./styles/scss/components/components";
+@import "./styles/scss/vendor/vendor";
+@import "./styles/scss/util/util";
+
+html {
+  font-size: 16px; // reference value for 1rem
+}
