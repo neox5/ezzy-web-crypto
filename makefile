@@ -19,21 +19,21 @@ commit:
 pushall:
 	@git push && git push --tags
 
-version-patch: lint format
+patch: lint format
 	@cd ./libs/ezzy-web-crypto; \
 	npm version patch
 	@$(MAKE) "commit"
 	@npm version patch
 	@$(MAKE) "pushall"
 
-version-minor: lint format
+minor: lint format
 	@cd ./libs/ezzy-web-crypto; \
 	npm version minor
 	@$(MAKE) "commit"
 	@npm version minor
 	@$(MAKE) "pushall"
 
-version-major: lint format
+major: lint format
 	@cd ./libs/ezzy-web-crypto; \
 	npm version major
 	@$(MAKE) "commit"
