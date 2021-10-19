@@ -29,6 +29,13 @@
   "projects": {
     "ezzy-web-crypto": {
       "tags": []
+    },
+    "lib-test": {
+      "tags": []
+    },
+    "lib-test-e2e": {
+      "tags": [],
+      "implicitDependencies": ["lib-test"]
     }
   }
 }
