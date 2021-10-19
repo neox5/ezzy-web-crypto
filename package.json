@@ -3,7 +3,7 @@
   "version": "1.4.3",
   "license": "MIT",
   "scripts": {
-    "format": "nx format affected",
+    "format": "nx format affected --base=main --head=HEAD",
     "lint": "nx run ezzy-web-crypto:lint",
     "build": "nx run ezzy-web-crypto:build",
     "test": "nx run ezzy-web-crypto:test"
