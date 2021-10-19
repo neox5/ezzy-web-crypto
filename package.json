@@ -1,6 +1,6 @@
 {
   "name": "ezzy-web-crypto",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "license": "MIT",
   "scripts": {
     "format": "nx format affected --base=main --head=HEAD",
