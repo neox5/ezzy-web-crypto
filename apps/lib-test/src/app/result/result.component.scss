@@ -1,0 +1,22 @@
+@import "component-base";
+
+.result {
+  padding: 0.5rem;
+  margin-top: 1rem;
+  border-radius: 0.25rem;
+  border: 2px solid #333;
+
+  .bold {
+    font-weight: 600;
+  }
+
+  &.ok {
+    border-color: green;
+    background-color: #92e992;
+  }
+  
+  &.nok {
+    border-color: red;
+    background-color: #e99292;;
+  }
+}
