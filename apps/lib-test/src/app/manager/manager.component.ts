@@ -1,9 +1,9 @@
 import { Component, OnInit } from "@angular/core";
 import { from } from "rxjs";
-import { switchMap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { ApiService } from "../api/api.service";
 import { Test, TestResult } from "../models/test.interface";
-import { testAesKeyConversion } from "../tests/test_aes";
+import { testAesEncryption, testAesKeyConversion } from "../tests/test-aes";
 
 let tests: Test[] = [];
 let results: TestResult[] = [];
@@ -32,9 +32,11 @@ export class ManagerComponent implements OnInit {
   }
 
   onClickStart(): void {
-    from(tests)
-      .pipe(switchMap((t: Test) => t(this._apiService)))
-      .subscribe((r: TestResult) => (results = [...results, r]));
+    tests.forEach((t) =>
+      t(this._apiService).subscribe(
+        (r: TestResult) => (results = [...results, r])
+      )
+    );
   }
 
   get results(): TestResult[] {
@@ -42,6 +44,6 @@ export class ManagerComponent implements OnInit {
   }
 
   private _initializeTests(): void {
-    tests = [testAesKeyConversion];
+    tests = [testAesKeyConversion, testAesEncryption];
   }
 }
