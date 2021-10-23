@@ -1,6 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { from } from "rxjs";
-import { switchMap, tap } from "rxjs/operators";
 import { ApiService } from "../api/api.service";
 import { Test, TestResult } from "../models/test.interface";
 import { testAesEncryption, testAesKeyConversion } from "../tests/test-aes";
