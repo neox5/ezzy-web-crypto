@@ -1,7 +1,17 @@
 import { Component, OnInit } from "@angular/core";
 import { ApiService } from "../api/api.service";
 import { Test, TestResult } from "../models/test.interface";
-import { testAesEncryption, testAesKeyConversion } from "../tests/test-aes";
+import {
+  testAesApi,
+  testAesEncryption,
+  testAesKeyConversion,
+} from "../tests/test-aes";
+import {
+  testApiPublicKey,
+  testEncryptWithApiPublicKey,
+  testEncryptWithLibPublicKey,
+} from "../tests/test-asymmetric-encryption";
+import { testGenerateKeyPair } from "../tests/test-key-pair";
 
 let tests: Test[] = [];
 let results: TestResult[] = [];
@@ -42,6 +52,14 @@ export class ManagerComponent implements OnInit {
   }
 
   private _initializeTests(): void {
-    tests = [testAesKeyConversion, testAesEncryption];
+    tests = [
+      testAesKeyConversion,
+      testAesEncryption,
+      testAesApi,
+      testGenerateKeyPair,
+      testApiPublicKey,
+      testEncryptWithApiPublicKey,
+      testEncryptWithLibPublicKey,
+    ];
   }
 }

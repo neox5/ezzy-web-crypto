@@ -30,9 +30,7 @@ export function encryptWithPublicKey(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
+    | AesGcmParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
 ): Observable<ArrayBuffer> {
   return publicKeyToCryptoKey(pubkey).pipe(
     switchMap((pub: CryptoKey) =>
@@ -57,9 +55,7 @@ export function encryptStringWithPublicKey(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
+    | AesGcmParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
 ): Observable<string> {
   return encryptWithPublicKey(
     pubkey,
@@ -87,9 +83,7 @@ export function decryptWithPrivateKey(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
+    | AesGcmParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
 ): Observable<ArrayBuffer> {
   return privateKeyToCryptoKey(privateKey).pipe(
     switchMap((priv: CryptoKey) =>
@@ -114,9 +108,7 @@ export function decryptStringWithPrivateKey(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
+    | AesGcmParams = DEFAULT_PRIVATEKEY_DECRYPT_CONFIG
 ): Observable<string> {
   return decryptWithPrivateKey(
     privateKey,

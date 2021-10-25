@@ -32,9 +32,7 @@ export function wrapAesInEnvelope(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_WRAP_PARAMS
+    | AesGcmParams = DEFAULT_WRAP_PARAMS
 ): Observable<ArrayBuffer> {
   const pub$ = publicKeyToCryptoKey(publicKey);
   const aes$ = aesKeyToCryptoKey(aesKey);
@@ -69,15 +67,12 @@ export function unwrapEnvelope(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_UNWRAP_PARAMS,
+    | AesGcmParams = DEFAULT_UNWRAP_PARAMS,
   unwrappedKeyParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | DhImportKeyParams
     | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS
 ): Observable<CryptoKey> {
   return privateKeyToCryptoKey(privateKey).pipe(
@@ -117,9 +112,7 @@ export function wrapAesInBase64Envelope(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_WRAP_PARAMS
+    | AesGcmParams = DEFAULT_WRAP_PARAMS
 ): Observable<string> {
   return wrapAesInEnvelope(publicKey, aesKey, wrapParams).pipe(
     map((envelope: ArrayBuffer) => arrayBufferToBase64(envelope))
@@ -142,15 +135,12 @@ export function unwrapBase64Envelope(
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
-    | AesCmacParams
-    | AesGcmParams
-    | AesCfbParams = DEFAULT_UNWRAP_PARAMS,
+    | AesGcmParams = DEFAULT_UNWRAP_PARAMS,
   unwrappedKeyParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
     | EcKeyImportParams
     | HmacImportParams
-    | DhImportKeyParams
     | AesKeyAlgorithm = DEFAULT_UNWRAP_KEY_PARAMS
 ): Observable<CryptoKey> {
   return unwrapEnvelope(

@@ -63,3 +63,33 @@ export function testAesEncryption(api: ApiService): Observable<TestResult> {
     map(addName("TestAesEncryption"))
   );
 }
+
+export function testAesApi(api: ApiService): Observable<TestResult> {
+  const aes$ = generateAesKey();
+  const testMessage = "this is the secret message äöü@!ß?³á";
+
+  return aes$.pipe(
+    switchMap((aes: CryptoKey) =>
+      combineLatest([
+        aesCryptoKeyToBase64(aes),
+        encryptStringWithAes(aes, testMessage),
+      ])
+    ),
+    switchMap(([aesBase64, encMessage]) =>
+      api.decryptMessageWithAes(encMessage, aesBase64)
+    ),
+    map((res) => {
+      if (res.message != testMessage) {
+        console.log("its a failure:",  res);
+        return failure(
+          "Decrypted message not equal to testMessage",
+          res.message,
+          testMessage
+        );
+      }
+      return success();
+    }),
+    catchError((err) => error(err)),
+    map(addName("TestAesApi"))
+  );
+}

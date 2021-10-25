@@ -19,6 +19,7 @@ export function failure(
 export function error(
   err: any
 ): Observable<{ isOk: boolean; errorMessage: string }> {
+  console.error(err);
   return of({ isOk: false, errorMessage: err });
 }
 
