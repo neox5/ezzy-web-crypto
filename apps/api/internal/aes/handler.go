@@ -26,6 +26,7 @@ func HandleAesDecryption() http.HandlerFunc {
 			jsonutil.MarshalResponse(rw, http.StatusBadRequest, &apihelper.ErrorResponse{
 				ErrorMessage: message,
 			})
+			return
 		}
 
 		plaintext := decrypt(request.AesKeyBase64, request.EncMessage)

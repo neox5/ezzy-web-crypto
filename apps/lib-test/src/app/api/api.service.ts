@@ -25,8 +25,10 @@ export class ApiService {
     return this._httpClient.post<void>(`${API}/rsa`, {});
   }
 
-  public getPublicKey(): Observable<{ public_key: string }> {
-    return this._httpClient.get<{ public_key: string }>(`${API}/rsa/pub`);
+  public getPublicKey(): Observable<string> {
+    return this._httpClient
+      .get<{ public_key: string }>(`${API}/rsa/pub`)
+      .pipe(map((res: { public_key: string }) => res.public_key));
   }
 
   public decryptMessageWithRsa(
@@ -47,5 +49,17 @@ export class ApiService {
         message,
       })
       .pipe(map((res: { enc_message: string }) => res.enc_message));
+  }
+
+  public openEnvelope(
+    envelopeBase64: string,
+    encMsgBase64: string
+  ): Observable<string> {
+    return this._httpClient
+      .post<{ message: string }>(`${API}/envelope/open`, {
+        envelope: envelopeBase64,
+        enc_message: encMsgBase64,
+      })
+      .pipe(map((res: { message: string }) => res.message));
   }
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"ezzy-web-crypto/api/apps/api/internal/aes"
+	"ezzy-web-crypto/api/apps/api/internal/envelope"
 	"ezzy-web-crypto/api/apps/api/internal/keystore"
 	"ezzy-web-crypto/api/apps/api/internal/rsa"
 	"log"
@@ -43,6 +44,10 @@ func main() {
 		r.Get("/pub", rsa.HandleGetPublicKey())
 		r.Post("/dec", rsa.HandleRsaDecryption())
 		r.Post("/enc", rsa.HandleRsaEncryption())
+	})
+
+	r.Route("/envelope", func(r chi.Router) {
+		r.Post("/open", envelope.HandleEnvelopeOpen())
 	})
 
 	http.ListenAndServe(":3000", r)

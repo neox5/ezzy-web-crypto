@@ -11,9 +11,13 @@ func decrypt(aesBase64 string, encMsgBase64 string) []byte {
 	key, _ := base64.StdEncoding.DecodeString(aesBase64)
 	encMsg, _ := base64.StdEncoding.DecodeString(encMsgBase64)
 
-	nonce, ciphertext := encMsg[:16], encMsg[16:]
+	return Decrypt(key, encMsg)
+}
 
-	c, err := aes.NewCipher(key)
+func Decrypt(aesKey, encData []byte) []byte {
+	nonce, cipherdata := encData[:16], encData[16:]
+
+	c, err := aes.NewCipher(aesKey)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -23,10 +27,10 @@ func decrypt(aesBase64 string, encMsgBase64 string) []byte {
 		fmt.Println(err)
 	}
 
-	plaintext, err := gcm.Open(nil, nonce, ciphertext, nil)
+	data, err := gcm.Open(nil, nonce, cipherdata, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	return plaintext
+	return data
 }

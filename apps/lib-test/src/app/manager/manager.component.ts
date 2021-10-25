@@ -11,6 +11,7 @@ import {
   testEncryptWithApiPublicKey,
   testEncryptWithLibPublicKey,
 } from "../tests/test-asymmetric-encryption";
+import { testEnvelopeWithApi } from "../tests/test-envelope";
 import { testGenerateKeyPair } from "../tests/test-key-pair";
 
 let tests: Test[] = [];
@@ -60,6 +61,7 @@ export class ManagerComponent implements OnInit {
       testApiPublicKey,
       testEncryptWithApiPublicKey,
       testEncryptWithLibPublicKey,
+      testEnvelopeWithApi,
     ];
   }
 }

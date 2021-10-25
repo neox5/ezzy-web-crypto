@@ -15,9 +15,7 @@ import { addName, error, failure, success } from "./test-helper";
 // testApiPublicKey tries to import the api's public key.
 export function testApiPublicKey(api: ApiService): Observable<TestResult> {
   return api.getPublicKey().pipe(
-    switchMap((res: { public_key: string }) =>
-      publicKeyToCryptoKey(res.public_key)
-    ),
+    switchMap((pub: string) => publicKeyToCryptoKey(pub)),
     map(() => success()),
     catchError((err) => error(err)),
     map(addName("TestApiPublicKey"))
@@ -31,9 +29,7 @@ export function testEncryptWithApiPublicKey(
 ): Observable<TestResult> {
   const testMessage = "/ery s3cr³t mess@ge to @pi $er/ice!";
   return api.getPublicKey().pipe(
-    switchMap((res: { public_key: string }) =>
-      encryptStringWithPublicKey(res.public_key, testMessage)
-    ),
+    switchMap((pub: string) => encryptStringWithPublicKey(pub, testMessage)),
     switchMap((encMessage: string) => api.decryptMessageWithRsa(encMessage)),
     map((res: { message: string }) => res.message),
     map((message: string) => {
