@@ -117,7 +117,7 @@ export function encryptWithAes(
     | AesCbcParams
     | AesGcmParams = DEFAULT_AES_ENCRYPT_PARAMS
 ): Observable<ArrayBuffer> {
-  const iv = window.crypto.getRandomValues(new Uint8Array(16));
+  const iv = window.crypto.getRandomValues(new Uint8Array(12));
 
   encryptParams = { ...encryptParams, iv };
 
@@ -148,7 +148,7 @@ export function decryptWithAes(
     | AesCbcParams
     | AesGcmParams = DEFAULT_AES_DECRYPT_PARAMS
 ): Observable<ArrayBuffer> {
-  const { buf1, buf2 } = splitArrayBufferAt(encData, 16); // first 16 bytes are the iv
+  const { buf1, buf2 } = splitArrayBufferAt(encData, 12); // first 12 bytes are the iv
   decryptParams = { ...decryptParams, iv: buf1 };
 
   return aesKeyToCryptoKey(aesKey).pipe(

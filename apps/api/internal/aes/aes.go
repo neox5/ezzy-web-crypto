@@ -15,17 +15,17 @@ func decrypt(aesBase64 string, encMsgBase64 string) []byte {
 }
 
 func Decrypt(aesKey, encData []byte) []byte {
-	nonce, cipherdata := encData[:16], encData[16:]
-
 	c, err := aes.NewCipher(aesKey)
 	if err != nil {
 		fmt.Println(err)
 	}
 
-	gcm, err := cipher.NewGCMWithNonceSize(c, 16)
+	gcm, err := cipher.NewGCM(c)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	nonce, cipherdata := encData[:gcm.NonceSize()], encData[gcm.NonceSize():]
 
 	data, err := gcm.Open(nil, nonce, cipherdata, nil)
 	if err != nil {
