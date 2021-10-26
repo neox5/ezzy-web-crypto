@@ -10,6 +10,7 @@ import { Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -52,10 +53,10 @@ export function generateAesKeyBase64(
     | HmacKeyGenParams
     | Pbkdf2Params = DEFAULT_AES_KEY_CONFIG,
   extractable = true
-): Observable<string> {
+): Observable<Base64> {
   return generateAesKey(params, extractable).pipe(
     switchMap((k: CryptoKey) => aesCryptoKeyToBase64(k)),
-    map((aes: string) => aes) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((aes: Base64) => aes) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }
 
@@ -66,7 +67,7 @@ export function aesCryptoKeyToRaw(aesKey: CryptoKey): Observable<ArrayBuffer> {
   return fromPromise(crypto.exportKey("raw", aesKey));
 }
 
-export function aesCryptoKeyToBase64(aesKey: CryptoKey): Observable<string> {
+export function aesCryptoKeyToBase64(aesKey: CryptoKey): Observable<Base64> {
   return aesCryptoKeyToRaw(aesKey).pipe(
     map((raw: ArrayBuffer) => arrayBufferToBase64(raw))
   );
@@ -81,7 +82,7 @@ export function aesCryptoKeyToBase64(aesKey: CryptoKey): Observable<string> {
  * @returns Observable of aes key as CryptoKey
  */
 export function aesKeyToCryptoKey(
-  aesKey: CryptoKey | string,
+  aesKey: CryptoKey | Base64,
   importParams: AlgorithmIdentifier = { name: "AES-GCM" }
 ): Observable<CryptoKey> {
   if (aesKey instanceof CryptoKey) {
@@ -109,7 +110,7 @@ export const DEFAULT_AES_ENCRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
  * @returns observable of encrypted data prefixed with iv as ArrayBuffer
  */
 export function encryptWithAes(
-  aesKey: CryptoKey | string,
+  aesKey: CryptoKey | Base64,
   data: ArrayBuffer,
   encryptParams:
     | RsaOaepParams
@@ -140,7 +141,7 @@ export const DEFAULT_AES_DECRYPT_PARAMS = DEFAULT_AES_KEY_CONFIG;
  *
  */
 export function decryptWithAes(
-  aesKey: CryptoKey | string,
+  aesKey: CryptoKey | Base64,
   encData: ArrayBuffer,
   decryptParams:
     | RsaOaepParams
@@ -170,14 +171,14 @@ export function decryptWithAes(
  * @returns encrypted string with prefixed iv as base64
  */
 export function encryptStringWithAes(
-  aesKey: CryptoKey | string,
+  aesKey: CryptoKey | Base64,
   str: string,
   encryptParams:
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
     | AesGcmParams = DEFAULT_AES_ENCRYPT_PARAMS
-): Observable<string> {
+): Observable<Base64> {
   const stringAsBuf = stringToArrayBuffer(str);
 
   return encryptWithAes(aesKey, stringAsBuf, encryptParams).pipe(
@@ -194,8 +195,8 @@ export function encryptStringWithAes(
  *
  */
 export function decryptStringWithAes(
-  aesKey: CryptoKey | string,
-  encData: string,
+  aesKey: CryptoKey | Base64,
+  encData: Base64,
   decryptParams:
     | RsaOaepParams
     | AesCtrParams

@@ -2,6 +2,7 @@ import { arrayBufferToBase64, stringToArrayBuffer } from "arraybuffer-fns";
 import { Observable, of } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -34,7 +35,7 @@ export function generateSHA(
 export function generateSHAFromString(
   algorithm: HashAlgorithm,
   str: string
-): Observable<string> {
+): Observable<Base64> {
   return of(stringToArrayBuffer(str)).pipe(
     switchMap((data: ArrayBuffer) => generateSHA(algorithm, data)),
     map((hash: ArrayBuffer) => arrayBufferToBase64(hash))
@@ -58,7 +59,7 @@ export function generateSHA1(data: ArrayBuffer): Observable<ArrayBuffer> {
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
-export function generateSHA1FromString(str: string): Observable<string> {
+export function generateSHA1FromString(str: string): Observable<Base64> {
   return generateSHAFromString("SHA-1", str);
 }
 
@@ -79,7 +80,7 @@ export function generateSHA256(data: ArrayBuffer): Observable<ArrayBuffer> {
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
-export function generateSHA256FromString(str: string): Observable<string> {
+export function generateSHA256FromString(str: string): Observable<Base64> {
   return generateSHAFromString("SHA-256", str);
 }
 
@@ -100,7 +101,7 @@ export function generateSHA384(data: ArrayBuffer): Observable<ArrayBuffer> {
  * @param str the string to generate the hash from
  * @returns observable of hash as base64 encoded string
  */
-export function generateSHA384FromString(str: string): Observable<string> {
+export function generateSHA384FromString(str: string): Observable<Base64> {
   return generateSHAFromString("SHA-384", str);
 }
 
@@ -121,6 +122,6 @@ export function generateSHA512(data: ArrayBuffer): Observable<ArrayBuffer> {
  * @param str the string to generate hash from
  * @returns observable of hash as base64 encoded string
  */
-export function generateSHA512FromString(str: string): Observable<string> {
+export function generateSHA512FromString(str: string): Observable<Base64> {
   return generateSHAFromString("SHA-512", str);
 }

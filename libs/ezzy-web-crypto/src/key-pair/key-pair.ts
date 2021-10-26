@@ -2,6 +2,7 @@ import { arrayBufferToBase64, base64ToArrayBuffer } from "arraybuffer-fns";
 import { Observable, of, zip } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -9,8 +10,8 @@ const crypto = window.crypto.subtle;
 // INTERFACE
 // *****************************************************************************
 export interface CryptoKeyPairBase64 {
-  private: string;
-  public: string;
+  private: Base64;
+  public: Base64;
 }
 
 // *****************************************************************************
@@ -78,7 +79,7 @@ export function exportPublicKeyAsSpki(key: CryptoKey): Observable<ArrayBuffer> {
  * @returns Observable of public key as CryptoKey
  */
 export function publicKeyToCryptoKey(
-  publicKey: CryptoKey | string,
+  publicKey: CryptoKey | Base64,
   importParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams
@@ -108,7 +109,7 @@ export function publicKeyToCryptoKey(
  * @returns Observable of secret/private key as CryptoKey
  */
 export function privateKeyToCryptoKey(
-  privateKey: CryptoKey | string,
+  privateKey: CryptoKey | Base64,
   importParams:
     | AlgorithmIdentifier
     | RsaHashedImportParams

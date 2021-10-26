@@ -8,6 +8,7 @@ import { Observable } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { publicKeyToCryptoKey, privateKeyToCryptoKey } from "../key-pair";
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -23,7 +24,7 @@ export const DEFAULT_PUBLICKEY_ENCRYPT_CONFIG = {
  * @returns observable of encrypted data as ArrayBuffer
  */
 export function encryptWithPublicKey(
-  pubkey: CryptoKey | string,
+  pubkey: CryptoKey | Base64,
   data: ArrayBuffer,
   encryptParams:
     | AlgorithmIdentifier
@@ -48,7 +49,7 @@ export function encryptWithPublicKey(
  * @returns observable of encrypted string
  */
 export function encryptStringWithPublicKey(
-  pubkey: CryptoKey | string,
+  pubkey: CryptoKey | Base64,
   data: string,
   encryptParams:
     | AlgorithmIdentifier
@@ -56,7 +57,7 @@ export function encryptStringWithPublicKey(
     | AesCtrParams
     | AesCbcParams
     | AesGcmParams = DEFAULT_PUBLICKEY_ENCRYPT_CONFIG
-): Observable<string> {
+): Observable<Base64> {
   return encryptWithPublicKey(
     pubkey,
     stringToArrayBuffer(data),
@@ -76,7 +77,7 @@ export const DEFAULT_PRIVATEKEY_DECRYPT_CONFIG = {
  * @returns observable of decrypted ArrayBuffer
  */
 export function decryptWithPrivateKey(
-  privateKey: CryptoKey | string,
+  privateKey: CryptoKey | Base64,
   encData: ArrayBuffer,
   decryptParams:
     | AlgorithmIdentifier
@@ -101,8 +102,8 @@ export function decryptWithPrivateKey(
  * @returns observable of decrypted string
  */
 export function decryptStringWithPrivateKey(
-  privateKey: CryptoKey | string,
-  encData: string,
+  privateKey: CryptoKey | Base64,
+  encData: Base64,
   decryptParams:
     | AlgorithmIdentifier
     | RsaOaepParams

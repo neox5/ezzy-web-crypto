@@ -1,3 +1,6 @@
+// models
+export * from "./model";
+// lib
 export * from "./aes";
 export * from "./arraybuffer";
 export * from "./asymmetric-encryption";

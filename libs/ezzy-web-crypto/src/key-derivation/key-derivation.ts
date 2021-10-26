@@ -10,6 +10,7 @@ import { map, switchMap } from "rxjs/operators";
 import { aesCryptoKeyToBase64 } from "../aes";
 import { createSalt } from "../salt/salt";
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -47,7 +48,7 @@ export function cryptoKeyFromPassword(
  */
 export function aesFromPassword(
   password: string,
-  salt?: ArrayBuffer | string
+  salt?: ArrayBuffer | Base64
 ): Observable<{ aes: CryptoKey; salt: ArrayBuffer }> {
   let freshSalt = createSalt(); // create fresh salt
 
@@ -96,17 +97,17 @@ export function aesFromPassword(
  */
 export function aesFromPasswordBase64(
   password: string,
-  salt?: ArrayBuffer | string
-): Observable<{ aesBase64: string; saltBase64: string }> {
+  salt?: ArrayBuffer | Base64
+): Observable<{ aesBase64: Base64; saltBase64: Base64 }> {
   return aesFromPassword(password, salt).pipe(
     switchMap((data: { aes: CryptoKey; salt: ArrayBuffer }) =>
       aesCryptoKeyToBase64(data.aes).pipe(
-        map((aesBase64: string) => ({
+        map((aesBase64: Base64) => ({
           aesBase64,
           saltBase64: arrayBufferToBase64(data.salt),
         }))
       )
     ),
-    map((data: { aesBase64: string; saltBase64: string }) => data) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
+    map((data: { aesBase64: Base64; saltBase64: Base64 }) => data) // Workaround for SwitchMap (rxjs v6.6.7) issue with TypeScript; fixed with rxjs v7.X.X
   );
 }

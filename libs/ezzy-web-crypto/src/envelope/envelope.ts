@@ -8,6 +8,7 @@ import {
   privateKeyToCryptoKey,
 } from "../key-pair";
 import { fromPromise } from "../util/from-promise";
+import { Base64 } from "../model/base64";
 
 const crypto = window.crypto.subtle;
 
@@ -25,7 +26,7 @@ export const DEFAULT_WRAP_PARAMS = DEFAULT_RSA_KEY_CONFIG;
  * @returns Observable of wrapped AES key as ArrayBuffer.
  */
 export function wrapAesInEnvelope(
-  publicKey: CryptoKey | string,
+  publicKey: CryptoKey | Base64,
   aesKey: CryptoKey | string,
   wrapParams:
     | AlgorithmIdentifier
@@ -61,7 +62,7 @@ export const DEFAULT_UNWRAP_KEY_PARAMS = DEFAULT_AES_KEY_CONFIG;
  */
 export function unwrapEnvelope(
   envelope: ArrayBuffer,
-  privateKey: CryptoKey | string,
+  privateKey: CryptoKey | Base64,
   unwrapParams:
     | AlgorithmIdentifier
     | RsaOaepParams
@@ -105,15 +106,15 @@ export function unwrapEnvelope(
  * @returns Observable of wrapped key in base64 format.
  */
 export function wrapAesInBase64Envelope(
-  publicKey: CryptoKey | string,
-  aesKey: CryptoKey | string,
+  publicKey: CryptoKey | Base64,
+  aesKey: CryptoKey | Base64,
   wrapParams:
     | AlgorithmIdentifier
     | RsaOaepParams
     | AesCtrParams
     | AesCbcParams
     | AesGcmParams = DEFAULT_WRAP_PARAMS
-): Observable<string> {
+): Observable<Base64> {
   return wrapAesInEnvelope(publicKey, aesKey, wrapParams).pipe(
     map((envelope: ArrayBuffer) => arrayBufferToBase64(envelope))
   );
@@ -128,8 +129,8 @@ export function wrapAesInBase64Envelope(
  * @returns observable of initially wrapped AES CryptoKey
  */
 export function unwrapBase64Envelope(
-  envelope: string,
-  privateKey: CryptoKey | string,
+  envelope: Base64,
+  privateKey: CryptoKey | Base64,
   unwrapParams:
     | AlgorithmIdentifier
     | RsaOaepParams
