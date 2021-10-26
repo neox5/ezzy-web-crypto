@@ -19,7 +19,7 @@ const crypto = window.crypto.subtle;
 /**
  * (internal) use with caution
  *
- * @param pass passowrd from which a key will be created
+ * @param pass password from which a key will be created
  * @param keyUsages list of keyUsage
  * @returns Observable of CryptoKey with de
  */
