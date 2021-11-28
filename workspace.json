@@ -1,6 +1,32 @@
 {
   "version": 2,
   "projects": {
+    "api": {
+      "projectType": "application",
+      "root": "apps/api",
+      "sourceRoot": "apps/api",
+      "targets": {
+        "build": {
+          "executor": "@nx-go/nx-go:build",
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/cmd/api/main.go"
+          }
+        },
+        "serve": {
+          "executor": "@nx-go/nx-go:serve",
+          "options": {
+            "main": "apps/api/cmd/api/main.go"
+          }
+        },
+        "test": {
+          "executor": "@nx-go/nx-go:test"
+        },
+        "lint": {
+          "executor": "@nx-go/nx-go:lint"
+        }
+      }
+    },
     "ezzy-web-crypto": {
       "root": "libs/ezzy-web-crypto",
       "sourceRoot": "libs/ezzy-web-crypto/src",
@@ -8,20 +34,14 @@
       "targets": {
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "libs/ezzy-web-crypto/**/*.ts"
-            ]
+            "lintFilePatterns": ["libs/ezzy-web-crypto/**/*.ts"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/libs/ezzy-web-crypto"
-          ],
+          "outputs": ["coverage/libs/ezzy-web-crypto"],
           "options": {
             "jestConfig": "libs/ezzy-web-crypto/jest.config.js",
             "passWithNoTests": true
@@ -29,9 +49,7 @@
         },
         "build": {
           "executor": "@nrwl/node:package",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/libs/ezzy-web-crypto",
             "tsConfig": "libs/ezzy-web-crypto/tsconfig.lib.json",
@@ -71,9 +89,7 @@
       "targets": {
         "build": {
           "executor": "@angular-devkit/build-angular:browser",
-          "outputs": [
-            "{options.outputPath}"
-          ],
+          "outputs": ["{options.outputPath}"],
           "options": {
             "outputPath": "dist/apps/lib-test",
             "index": "apps/lib-test/src/index.html",
@@ -85,14 +101,10 @@
               "apps/lib-test/src/favicon.ico",
               "apps/lib-test/src/assets"
             ],
-            "styles": [
-              "apps/lib-test/src/styles.scss"
-            ],
+            "styles": ["apps/lib-test/src/styles.scss"],
             "scripts": [],
             "stylePreprocessorOptions": {
-              "includePaths": [
-                "apps/lib-test/src/styles/scss"
-              ]
+              "includePaths": ["apps/lib-test/src/styles/scss"]
             }
           },
           "configurations": {
@@ -157,9 +169,7 @@
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/lib-test"
-          ],
+          "outputs": ["coverage/apps/lib-test"],
           "options": {
             "jestConfig": "apps/lib-test/jest.config.js",
             "passWithNoTests": true
@@ -186,40 +196,10 @@
         },
         "lint": {
           "executor": "@nrwl/linter:eslint",
-          "outputs": [
-            "{options.outputFile}"
-          ],
+          "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/lib-test-e2e/**/*.{js,ts}"
-            ]
+            "lintFilePatterns": ["apps/lib-test-e2e/**/*.{js,ts}"]
           }
-        }
-      }
-    },
-    "api": {
-      "projectType": "application",
-      "root": "apps/api",
-      "sourceRoot": "apps/api",
-      "targets": {
-        "build": {
-          "executor": "@nx-go/nx-go:build",
-          "options": {
-            "outputPath": "dist/apps/api",
-            "main": "apps/api/cmd/api/main.go"
-          }
-        },
-        "serve": {
-          "executor": "@nx-go/nx-go:serve",
-          "options": {
-            "main": "apps/api/cmd/api/main.go"
-          }
-        },
-        "test": {
-          "executor": "@nx-go/nx-go:test"
-        },
-        "lint": {
-          "executor": "@nx-go/nx-go:lint"
         }
       }
     }

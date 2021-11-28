@@ -1,7 +1,7 @@
 <!-- omit in toc -->
 # Ezzy WebCrypto
 
-> A wrapper library for envelope encrytion using the WebCrypto API.
+> A wrapper library for envelope encrytion using the WebCrypto API. It'sawesome.
 
 <!-- omit in toc -->
 ## Table of Contents
